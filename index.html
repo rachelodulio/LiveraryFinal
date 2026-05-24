@@ -1,0 +1,1583 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- ============================================================
+       Liverary — index.html (Landing Page)
+       Online Digital Library System
+       ============================================================ -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liverary | Home</title>
+    <link rel="icon" type="image/png" href="images/icon.png" />
+    <meta
+      name="description"
+      content="Liverary is an elegant online digital library. Explore thousands of books, read online, and manage your reading journey."
+    />
+
+    <!-- Google Fonts: Playfair Display (display headings) + Poppins (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <!-- ============================================================
+       NAVBAR
+       ============================================================ -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-container">
+        <!-- Logo -->
+        <a href="index.html" class="nav-logo">
+          <div class="logo-icon">
+            <img src="images/icon.png" alt="Liverary Logo" />
+          </div>
+          <span class="logo-text">Liverary</span>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#home" class="active">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <!-- Desktop CTA Buttons -->
+        <div class="nav-cta">
+          <button
+            class="btn-nav-login"
+            onclick="window.location.href = 'login.html'"
+          >
+            Login
+          </button>
+          <button
+            class="btn-nav-signup"
+            onclick="window.location.href = 'signup.html'"
+          >
+            Sign Up Free
+          </button>
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <button
+          class="hamburger"
+          id="hamburger"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile Fullscreen Nav Overlay -->
+    <div
+      class="mobile-nav"
+      id="mobileNav"
+      role="dialog"
+      aria-label="Mobile navigation"
+    >
+      <a href="#home" onclick="closeMobileNav()">Home</a>
+      <a href="#about" onclick="closeMobileNav()">About</a>
+      <a href="#features" onclick="closeMobileNav()">Features</a>
+      <a href="#contact" onclick="closeMobileNav()">Contact</a>
+      <div class="mobile-nav-cta">
+        <button
+          class="btn-nav-login"
+          onclick="window.location.href = 'login.html'"
+        >
+          Login
+        </button>
+        <button
+          class="btn-nav-signup"
+          onclick="window.location.href = 'signup.html'"
+        >
+          Sign Up
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================================
+       HERO SECTION
+       ============================================================ -->
+    <section class="hero" id="home">
+      <!-- Decorative background circles -->
+      <div class="hero-bg-circle hero-bg-circle-1"></div>
+      <div class="hero-bg-circle hero-bg-circle-2"></div>
+
+      <!-- Floating decorative book shapes -->
+      <div class="hero-decor hero-decor-1"></div>
+      <div class="hero-decor hero-decor-2"></div>
+      <div class="hero-decor hero-decor-3"></div>
+
+      <div class="container">
+        <div class="hero-content">
+          <!-- Left: Text + CTA -->
+          <div class="hero-left">
+            <div class="hero-badge">
+              <span class="hero-badge-dot"></span>
+              Now with 10,000+ Digital Books
+            </div>
+
+            <h1 class="hero-title">
+              Your World of<br />
+              <span class="accent">Stories &amp;</span><br />
+              <span class="underline-word">Knowledge</span>
+            </h1>
+
+            <p class="hero-desc">
+              Liverary brings the entire library to your fingertips. Explore,
+              read, and discover thousands of books across every genre —
+              anytime, anywhere.
+            </p>
+
+            <div class="hero-actions">
+              <a href="signup.html" class="btn-primary">
+                <span class="btn-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-book-open-text"
+                  >
+                    <path d="M12 7v14" />
+                    <path d="M16 12h2" />
+                    <path d="M16 8h2" />
+                    <path
+                      d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+                    />
+                    <path d="M6 12h2" />
+                    <path d="M6 8h2" />
+                  </svg>
+                </span>
+
+                <span>Start Reading Free</span>
+              </a>
+              <a href="#features" class="btn-secondary">
+                <span class="btn-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-sparkles"
+                  >
+                    <path
+                      d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
+                    />
+                  </svg>
+                </span>
+                <span>Explore Features</span>
+              </a>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="hero-stats">
+              <div class="stat">
+                <div class="stat-number">10k<span>+</span></div>
+                <div class="stat-label">Digital Books</div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat">
+                <div class="stat-number">5k<span>+</span></div>
+                <div class="stat-label">Active Readers</div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat">
+                <div class="stat-number">50<span>+</span></div>
+                <div class="stat-label">Categories</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Floating Book Showcase -->
+          <div class="hero-right">
+            <div class="hero-book-showcase">
+              <!-- Left book -->
+              <div class="book-card-float book-card-left">
+                <div class="book-cover book-cover-2">
+                  <div class="book-cover-title">
+                    The Art of Thinking Clearly
+                  </div>
+                </div>
+                <div class="book-info">
+                  <div class="book-info-title">The Art of Thinking</div>
+                  <div class="book-info-author">Rolf Dobelli</div>
+                  <div class="book-info-stars">★★★★★</div>
+                </div>
+              </div>
+
+              <!-- Center main book -->
+              <div class="book-card-float book-card-main">
+                <div class="book-cover book-cover-1">
+                  <div class="book-cover-title">
+                    Atomic Habits: Build Better Habits
+                  </div>
+                </div>
+                <div class="book-info">
+                  <div class="book-info-title">Atomic Habits</div>
+                  <div class="book-info-author">James Clear</div>
+                  <div class="book-info-stars">★★★★★</div>
+                </div>
+              </div>
+
+              <!-- Right book -->
+              <div class="book-card-float book-card-right">
+                <div class="book-cover book-cover-3">
+                  <div class="book-cover-title">
+                    Deep Work: Focus for Success
+                  </div>
+                </div>
+                <div class="book-info">
+                  <div class="book-info-title">Deep Work</div>
+                  <div class="book-info-author">Cal Newport</div>
+                  <div class="book-info-stars">★★★★☆</div>
+                </div>
+              </div>
+
+              <!-- Floating badges -->
+              <div class="hero-badge-float hero-badge-float-1">
+                <span class="badge-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-flame"
+                  >
+                    <path
+                      d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"
+                    />
+                  </svg>
+                </span>
+
+                <span>Trending Now</span>
+              </div>
+
+              <div class="hero-badge-float hero-badge-float-2">
+                <span class="badge-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-star"
+                  >
+                    <path
+                      d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
+                    />
+                  </svg>
+                </span>
+                <span>Top Rated</span>
+              </div>
+            </div>
+          </div>
+          <!-- /hero-right -->
+        </div>
+        <!-- /hero-content -->
+      </div>
+      <!-- /container -->
+    </section>
+
+    <!-- ============================================================
+       ABOUT SECTION
+       ============================================================ -->
+    <section class="about" id="about">
+      <div class="container">
+        <div class="about-grid">
+          <!-- Visual side (hidden on mobile) -->
+          <div class="about-visual reveal-left">
+            <div class="about-image-stack">
+              <!-- Main Image -->
+              <div class="about-img-card about-img-card-main">
+                <img
+                  src="images/dashboardOnDesktop.png"
+                  alt="Liverary Dashboard"
+                  class="about-img"
+                />
+              </div>
+
+              <!-- Overlay Image -->
+              <div class="about-img-card about-img-card-overlay">
+                <img
+                  src="images/readingbook1.png"
+                  alt="Reading Book"
+                  class="about-img"
+                />
+              </div>
+            </div>
+          </div>
+          <!-- /about-visual -->
+
+          <!-- Text side -->
+          <div class="about-text reveal-right">
+            <div class="section-tag">About Liverary</div>
+            <h2>A New Era of<br />Reading Begins Here</h2>
+            <p>
+              Liverary was built for students, researchers, and book lovers who
+              deserve instant access to a world-class digital library — without
+              the walls.
+            </p>
+            <p>
+              From academic texts to best-selling fiction, our curated
+              collection grows every week. Backed by smart tools that remember
+              where you left off and surface what you'll love next.
+            </p>
+
+            <ul class="about-features-list">
+              <li>
+                <span class="about-check">✓</span>
+                Thousands of books available to read instantly online
+              </li>
+              <li>
+                <span class="about-check">✓</span>
+                Smart reading progress that syncs across all your devices
+              </li>
+              <li>
+                <span class="about-check">✓</span>
+                Personalized recommendations based on your reading habits
+              </li>
+              <li>
+                <span class="about-check">✓</span>
+                Librarians and admins keep the collection fresh and organized
+              </li>
+            </ul>
+
+            <a href="signup.html" class="btn-primary">
+              Join Liverary Today →
+            </a>
+          </div>
+        </div>
+        <!-- /about-grid -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+       FEATURES SECTION
+       ============================================================ -->
+    <section class="features" id="features">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">What We Offer</div>
+          <h2 class="section-title">Everything a Reader Needs</h2>
+          <p class="section-subtitle">
+            Liverary is packed with features designed to make every reading
+            session seamless, enjoyable, and rewarding.
+          </p>
+        </div>
+
+        <!-- 6-card feature grid -->
+        <div class="features-grid stagger">
+          <div class="feature-card reveal">
+            <div class="feature-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-book-open-text"
+              >
+                <path d="M12 7v14" />
+                <path d="M16 12h2" />
+                <path d="M16 8h2" />
+                <path
+                  d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+                />
+                <path d="M6 12h2" />
+                <path d="M6 8h2" />
+              </svg>
+            </div>
+            <h3>Read Online</h3>
+            <p>
+              Enjoy any book right in your browser with our clean,
+              distraction-free reader. No downloads, no waiting — just reading.
+            </p>
+          </div>
+
+          <div class="feature-card reveal">
+            <div class="feature-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-step-forward"
+              >
+                <path
+                  d="M10.029 4.285A2 2 0 0 0 7 6v12a2 2 0 0 0 3.029 1.715l9.997-5.998a2 2 0 0 0 .003-3.432z"
+                />
+                <path d="M3 4v16" />
+              </svg>
+            </div>
+            <h3>Continue Reading</h3>
+            <p>
+              Your progress is saved automatically. Pick up exactly where you
+              left off on any device, any time.
+            </p>
+          </div>
+
+          <div class="feature-card reveal">
+            <div class="feature-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-book-heart"
+              >
+                <path
+                  d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"
+                />
+                <path
+                  d="M8.62 9.8A2.25 2.25 0 1 1 12 6.836a2.25 2.25 0 1 1 3.38 2.966l-2.626 2.856a.998.998 0 0 1-1.507 0z"
+                />
+              </svg>
+            </div>
+            <h3>Favorites System</h3>
+            <p>
+              Bookmark your favourite titles into a personal shelf. Your
+              collection, curated your way.
+            </p>
+          </div>
+
+          <div class="feature-card reveal">
+            <div class="feature-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chart-column-stacked"
+              >
+                <path d="M11 13H7" />
+                <path d="M19 9h-4" />
+                <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+                <rect x="15" y="5" width="4" height="12" rx="1" />
+                <rect x="7" y="8" width="4" height="9" rx="1" />
+              </svg>
+            </div>
+            <h3>Browse Categories</h3>
+            <p>
+              Explore books by genre, topic, or mood. Fiction, science, history,
+              technology and dozens more curated categories.
+            </p>
+          </div>
+
+          <div class="feature-card reveal">
+            <div class="feature-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-search"
+              >
+                <path d="m21 21-4.34-4.34" />
+                <circle cx="11" cy="11" r="8" />
+              </svg>
+            </div>
+            <h3>Smart Search</h3>
+            <p>
+              Find any book instantly by title, author, or category with our
+              fast, intelligent search engine.
+            </p>
+          </div>
+
+          <div class="feature-card reveal">
+            <div class="feature-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-user-star"
+              >
+                <path
+                  d="M16.051 12.616a1 1 0 0 1 1.909.024l.737 1.452a1 1 0 0 0 .737.535l1.634.256a1 1 0 0 1 .588 1.806l-1.172 1.168a1 1 0 0 0-.282.866l.259 1.613a1 1 0 0 1-1.541 1.134l-1.465-.75a1 1 0 0 0-.912 0l-1.465.75a1 1 0 0 1-1.539-1.133l.258-1.613a1 1 0 0 0-.282-.866l-1.156-1.153a1 1 0 0 1 .572-1.822l1.633-.256a1 1 0 0 0 .737-.535z"
+                />
+
+                <path d="M8 15H7a4 4 0 0 0-4 4v2" />
+
+                <circle cx="10" cy="7" r="4" />
+              </svg>
+            </div>
+            <h3>Role-Based Access</h3>
+            <p>
+              Admins, librarians, and members each get a tailored dashboard
+              built for their exact needs.
+            </p>
+          </div>
+        </div>
+        <!-- /features-grid -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+       CATEGORIES SHOWCASE
+       ============================================================ -->
+    <section class="categories" id="categories">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-tag">Browse Categories</div>
+          <h2 class="section-title">Find Your Genre</h2>
+          <p class="section-subtitle">
+            From timeless classics to cutting-edge tech, every category has a
+            curated shelf waiting for you.
+          </p>
+        </div>
+
+        <!-- 8 category cards -->
+        <div class="categories-grid stagger">
+          <div class="category-card reveal">
+            <span class="cat-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-book-open-text"
+              >
+                <path d="M12 7v14" />
+                <path d="M16 12h2" />
+                <path d="M16 8h2" />
+                <path
+                  d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+                />
+                <path d="M6 12h2" />
+                <path d="M6 8h2" />
+              </svg>
+            </span>
+            <div class="cat-name">Fiction</div>
+            <div class="cat-count">1,240 books</div>
+          </div>
+          <div class="category-card reveal">
+            <span class="cat-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-microscope"
+              >
+                <path d="M6 18h8" />
+                <path d="M3 22h18" />
+                <path d="M14 22a7 7 0 1 0 0-14h-1" />
+                <path d="M9 14h2" />
+                <path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z" />
+                <path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3" />
+              </svg>
+            </span>
+            <div class="cat-name">Science</div>
+            <div class="cat-count">890 books</div>
+          </div>
+          <div class="category-card reveal">
+            <span class="cat-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-landmark"
+              >
+                <path d="M10 18v-7" />
+                <path
+                  d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z"
+                />
+                <path d="M14 18v-7" />
+                <path d="M18 18v-7" />
+                <path d="M3 22h18" />
+                <path d="M6 18v-7" />
+              </svg>
+            </span>
+            <div class="cat-name">History</div>
+            <div class="cat-count">720 books</div>
+          </div>
+          <div class="category-card reveal">
+            <span class="cat-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-heart-handshake"
+              >
+                <path
+                  d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762"
+                />
+              </svg>
+            </span>
+            <div class="cat-name">Self-Help</div>
+            <div class="cat-count">980 books</div>
+          </div>
+          <div class="category-card reveal">
+            <span class="cat-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-monitor-smartphone"
+              >
+                <path
+                  d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8"
+                />
+                <path d="M10 19v-3.96 3.15" />
+                <path d="M7 19h5" />
+                <rect width="6" height="10" x="16" y="12" rx="2" />
+              </svg>
+            </span>
+            <div class="cat-name">Technology</div>
+            <div class="cat-count">1,100 books</div>
+          </div>
+          <div class="category-card reveal">
+            <span class="cat-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-drama"
+              >
+                <path d="M10 11h.01" />
+                <path d="M14 6h.01" />
+                <path d="M18 6h.01" />
+                <path d="M6.5 13.1h.01" />
+                <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3" />
+                <path d="M17.4 9.9c-.8.8-2 .8-2.8 0" />
+                <path
+                  d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7"
+                />
+                <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4" />
+              </svg>
+            </span>
+            <div class="cat-name">Drama</div>
+            <div class="cat-count">430 books</div>
+          </div>
+          <div class="category-card reveal">
+            <span class="cat-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-earth"
+              >
+                <path d="M21.54 15H17a2 2 0 0 0-2 2v4.54" />
+                <path
+                  d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"
+                />
+                <path
+                  d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"
+                />
+                <circle cx="12" cy="12" r="10" />
+              </svg>
+            </span>
+            <div class="cat-name">Travel</div>
+            <div class="cat-count">390 books</div>
+          </div>
+          <div class="category-card reveal">
+            <span class="cat-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-brain"
+              >
+                <path d="M12 18V5" />
+                <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" />
+                <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" />
+                <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" />
+                <path d="M18 18a4 4 0 0 0 2-7.464" />
+                <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" />
+                <path d="M6 18a4 4 0 0 1-2-7.464" />
+                <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" />
+              </svg>
+            </span>
+            <div class="cat-name">Psychology</div>
+            <div class="cat-count">660 books</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pricing" id="access">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-tag">Free Access</div>
+          <h2 class="section-title">Start Reading with a Free Account</h2>
+          <p class="section-subtitle">
+            Create an account to browse books, save favorites, and continue
+            reading anytime.
+          </p>
+          <a href="signup.html" class="btn-primary">Create Free Account</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+       FEATURED BOOKS CAROUSEL
+       ============================================================ -->
+    <section class="featured-books" id="books">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-tag">Featured Collection</div>
+          <h2 class="section-title">Books You'll Love</h2>
+          <p class="section-subtitle">
+            Handpicked titles trending on Liverary right now. Start your next
+            great read in seconds.
+          </p>
+        </div>
+      </div>
+
+      <!-- Carousel — wider than container for edge-to-edge feel -->
+      <div class="container">
+        <div class="carousel-wrapper">
+          <div class="carousel-track" id="carouselTrack">
+            <!-- Book Card 1 -->
+            <div class="fbook-card">
+              <div class="fbook-cover fbook-cover-c1">
+                <span class="fbook-badge">Trending</span>
+                <div class="fbook-cover-title">Atomic Habits</div>
+              </div>
+              <div class="fbook-info">
+                <div class="fbook-title">Atomic Habits</div>
+                <div class="fbook-author">James Clear</div>
+                <div class="fbook-rating">★★★★★ <span>4.9</span></div>
+              </div>
+            </div>
+
+            <!-- Book Card 2 -->
+            <div class="fbook-card">
+              <div class="fbook-cover fbook-cover-c2">
+                <span class="fbook-badge">New</span>
+                <div class="fbook-cover-title">Deep Work</div>
+              </div>
+              <div class="fbook-info">
+                <div class="fbook-title">Deep Work</div>
+                <div class="fbook-author">Cal Newport</div>
+                <div class="fbook-rating">★★★★☆ <span>4.7</span></div>
+              </div>
+            </div>
+
+            <!-- Book Card 3 -->
+            <div class="fbook-card">
+              <div class="fbook-cover fbook-cover-c3">
+                <span class="fbook-badge">Classic</span>
+                <div class="fbook-cover-title">Thinking Fast &amp; Slow</div>
+              </div>
+              <div class="fbook-info">
+                <div class="fbook-title">Thinking, Fast &amp; Slow</div>
+                <div class="fbook-author">Daniel Kahneman</div>
+                <div class="fbook-rating">★★★★★ <span>4.8</span></div>
+              </div>
+            </div>
+
+            <!-- Book Card 4 -->
+            <div class="fbook-card">
+              <div class="fbook-cover fbook-cover-c4">
+                <div class="fbook-cover-title">The Psychology of Money</div>
+              </div>
+              <div class="fbook-info">
+                <div class="fbook-title">Psychology of Money</div>
+                <div class="fbook-author">Morgan Housel</div>
+                <div class="fbook-rating">★★★★★ <span>4.9</span></div>
+              </div>
+            </div>
+
+            <!-- Book Card 5 -->
+            <div class="fbook-card">
+              <div class="fbook-cover fbook-cover-c5">
+                <span class="fbook-badge">Popular</span>
+                <div class="fbook-cover-title">Sapiens</div>
+              </div>
+              <div class="fbook-info">
+                <div class="fbook-title">Sapiens</div>
+                <div class="fbook-author">Yuval Noah Harari</div>
+                <div class="fbook-rating">★★★★★ <span>4.8</span></div>
+              </div>
+            </div>
+
+            <!-- Book Card 6 -->
+            <div class="fbook-card">
+              <div class="fbook-cover fbook-cover-c6">
+                <div class="fbook-cover-title">Zero to One</div>
+              </div>
+              <div class="fbook-info">
+                <div class="fbook-title">Zero to One</div>
+                <div class="fbook-author">Peter Thiel</div>
+                <div class="fbook-rating">★★★★☆ <span>4.6</span></div>
+              </div>
+            </div>
+
+            <!-- Book Card 7 -->
+            <div class="fbook-card">
+              <div class="fbook-cover fbook-cover-c1">
+                <span class="fbook-badge">Trending</span>
+                <div class="fbook-cover-title">The Subtle Art</div>
+              </div>
+              <div class="fbook-info">
+                <div class="fbook-title">The Subtle Art</div>
+                <div class="fbook-author">Mark Manson</div>
+                <div class="fbook-rating">★★★★☆ <span>4.5</span></div>
+              </div>
+            </div>
+
+            <!-- Book Card 8 -->
+            <div class="fbook-card">
+              <div class="fbook-cover fbook-cover-c2">
+                <div class="fbook-cover-title">Educated</div>
+              </div>
+              <div class="fbook-info">
+                <div class="fbook-title">Educated</div>
+                <div class="fbook-author">Tara Westover</div>
+                <div class="fbook-rating">★★★★★ <span>4.9</span></div>
+              </div>
+            </div>
+          </div>
+          <!-- /carousel-track -->
+        </div>
+        <!-- /carousel-wrapper -->
+
+        <!-- Carousel Controls -->
+        <div class="carousel-controls">
+          <button class="carousel-btn" id="prevBtn" aria-label="Previous books">
+            &#8592;
+          </button>
+          <div class="carousel-dots" id="carouselDots">
+            <!-- Dots injected by JS -->
+          </div>
+          <button class="carousel-btn" id="nextBtn" aria-label="Next books">
+            &#8594;
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+       TESTIMONIALS SECTION
+       ============================================================ -->
+    <section class="testimonials" id="testimonials">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-tag">What Readers Say</div>
+          <h2 class="section-title">Loved by Book Lovers</h2>
+          <p class="section-subtitle">
+            Join thousands of satisfied readers who have made Liverary their
+            go-to digital library.
+          </p>
+        </div>
+
+        <div class="testimonials-grid stagger">
+          <!-- Testimonial 1 -->
+          <div class="testi-card reveal">
+            <div class="testi-stars">★★★★★</div>
+            <div class="testi-quote">"</div>
+            <p class="testi-text">
+              Liverary completely changed how I study. I can access any book I
+              need for my research without leaving my desk. The reading
+              experience is clean and distraction-free.
+            </p>
+            <div class="testi-author">
+              <div class="testi-avatar avatar-1">A</div>
+              <div>
+                <div class="testi-name">Andrea Santos</div>
+                <div class="testi-role">Graduate Student, UST</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="testi-card reveal">
+            <div class="testi-stars">★★★★★</div>
+            <div class="testi-quote">"</div>
+            <p class="testi-text">
+              As a librarian, the upload and management tools are incredibly
+              intuitive. I can feature books and organize categories in minutes.
+              The system is exactly what our institution needed.
+            </p>
+            <div class="testi-author">
+              <div class="testi-avatar avatar-2">M</div>
+              <div>
+                <div class="testi-name">Maria Reyes</div>
+                <div class="testi-role">Head Librarian, DLSU</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="testi-card reveal">
+            <div class="testi-stars">★★★★★</div>
+            <div class="testi-quote">"</div>
+            <p class="testi-text">
+              The favorites feature and continue-reading tracker are game
+              changers. I always have a dozen books on the go and Liverary keeps
+              everything perfectly organized.
+            </p>
+            <div class="testi-author">
+              <div class="testi-avatar avatar-3">J</div>
+              <div>
+                <div class="testi-name">John Dela Cruz</div>
+                <div class="testi-role">Software Developer & Avid Reader</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /testimonials-grid -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+       CONTACT SECTION
+       ============================================================ -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="contact-grid">
+          <!-- Contact Info -->
+          <div class="contact-info reveal-left">
+            <div class="section-tag">Get in Touch</div>
+            <h2>We'd Love to<br />Hear From You</h2>
+            <p>
+              Have a question about Liverary? Want to partner with us or request
+              a feature? Our team is here to help.
+            </p>
+
+            <div class="contact-details">
+              <div class="contact-item">
+                <div class="contact-item-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-mail"
+                  >
+                    <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                  </svg>
+                </div>
+                <div class="contact-item-text">
+                  <strong>Email</strong>
+                  <span>hello@liverary.ph</span>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-item-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-phone"
+                  >
+                    <path
+                      d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"
+                    />
+                  </svg>
+                </div>
+                <div class="contact-item-text">
+                  <strong>Phone</strong>
+                  <span>+63 912 345 6789</span>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-item-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-pin"
+                  >
+                    <path d="M12 17v5" />
+                    <path
+                      d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"
+                    />
+                  </svg>
+                </div>
+                <div class="contact-item-text">
+                  <strong>Address</strong>
+                  <span>Quezon City, Metro Manila, Philippines</span>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-item-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-clock-9"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6H8" />
+                  </svg>
+                </div>
+                <div class="contact-item-text">
+                  <strong>Support Hours</strong>
+                  <span>Mon–Fri, 9:00 AM – 6:00 PM</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form -->
+          <div class="contact-form reveal-right">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contactFirstName">First Name</label>
+                <input type="text" id="contactFirstName" placeholder="Juan" />
+              </div>
+              <div class="form-group">
+                <label for="contactLastName">Last Name</label>
+                <input
+                  type="text"
+                  id="contactLastName"
+                  placeholder="Dela Cruz"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="contactEmail">Email Address</label>
+              <input
+                type="email"
+                id="contactEmail"
+                placeholder="juan@email.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="contactSubject">Subject</label>
+              <input
+                type="text"
+                id="contactSubject"
+                placeholder="How can we help?"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="contactMessage">Message</label>
+              <textarea
+                id="contactMessage"
+                placeholder="Tell us more about your inquiry..."
+              ></textarea>
+            </div>
+
+            <!-- Send button -->
+            <button
+              class="btn-primary"
+              id="contactSubmitBtn"
+              style="width: 100%; justify-content: center"
+              onclick="handleContactSubmit()"
+            >
+              <span class="btn-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-mail"
+                >
+                  <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
+                  <rect x="2" y="4" width="20" height="16" rx="2" />
+                </svg>
+              </span>
+
+              <span>Send Message</span>
+            </button>
+          </div>
+        </div>
+        <!-- /contact-grid -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <!-- Brand column -->
+          <div class="footer-brand">
+            <div class="nav-logo" style="margin-bottom: 0">
+              <div class="logo-icon">
+                <img src="images/icon.png" alt="Liverary Logo" />
+              </div>
+
+              <span class="logo-text" style="color: var(--cream)">
+                Liverary
+              </span>
+            </div>
+            <p class="footer-tagline">
+              Your online digital library. Thousands of books, one elegant
+              platform. Read, explore, and grow — wherever you are.
+            </p>
+            <div class="footer-social">
+              <a class="social-btn" href="#" aria-label="Facebook">f</a>
+              <a class="social-btn" href="#" aria-label="Twitter">𝕏</a>
+              <a class="social-btn" href="#" aria-label="Instagram">in</a>
+              <a class="social-btn" href="#" aria-label="YouTube">▶</a>
+            </div>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+              <li><a href="#home">Home</a></li>
+              <li><a href="#about">About Us</a></li>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#categories">Categories</a></li>
+            </ul>
+          </div>
+
+          <!-- Library -->
+          <div class="footer-col">
+            <h4>Library</h4>
+            <ul class="footer-links">
+              <li><a href="signup.html">Browse Books</a></li>
+              <li><a href="signup.html">New Arrivals</a></li>
+              <li><a href="signup.html">Featured Picks</a></li>
+              <li><a href="signup.html">Top Rated</a></li>
+              <li><a href="signup.html">All Categories</a></li>
+            </ul>
+          </div>
+
+          <!-- Support -->
+          <div class="footer-col">
+            <h4>Support</h4>
+            <ul class="footer-links">
+              <li><a href="#contact">Contact Us</a></li>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- /footer-grid -->
+
+        <!-- Footer Bottom Bar -->
+        <div class="footer-bottom">
+          <div class="footer-copy">
+            &copy; 2025 <span>Liverary</span>. All rights reserved. Built with
+            ❤️ for readers.
+          </div>
+          <div class="footer-legal">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Cookies</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast" role="alert" aria-live="polite">
+      <span>✓</span>
+      <span id="toastMsg">Message sent!</span>
+    </div>
+
+    <!-- Scroll-to-top button -->
+    <button
+      class="scroll-top"
+      id="scrollTopBtn"
+      aria-label="Scroll to top"
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+    >
+      ↑
+    </button>
+
+    <!-- ============================================================
+       INLINE JAVASCRIPT — Landing Page Interactions
+       All landing-page JS is kept here.
+       Shared app logic will live in js/app.js (future files).
+       ============================================================ -->
+    <script>
+      /* ─────────────────────────────────────────────
+       1. NAVBAR — scroll behaviour + active links
+       ───────────────────────────────────────────── */
+      const navbar = document.getElementById("navbar");
+
+      window.addEventListener("scroll", () => {
+        // Add .scrolled class when user scrolls down 60px
+        navbar.classList.toggle("scrolled", window.scrollY > 60);
+
+        // Show/hide scroll-to-top button
+        document
+          .getElementById("scrollTopBtn")
+          .classList.toggle("visible", window.scrollY > 400);
+
+        // Update active nav link based on section in view
+        updateActiveNav();
+      });
+
+      function updateActiveNav() {
+        // All section IDs that correspond to nav links
+        const sections = ["home", "about", "features", "pricing", "contact"];
+        const links = document.querySelectorAll(".nav-links a");
+        let current = "";
+
+        sections.forEach((id) => {
+          const section = document.getElementById(id);
+          if (!section) return;
+          // If scroll position passed the section's top (with 120px offset)
+          if (window.scrollY >= section.offsetTop - 120) {
+            current = id;
+          }
+        });
+
+        links.forEach((link) => {
+          link.classList.toggle(
+            "active",
+            link.getAttribute("href") === "#" + current,
+          );
+        });
+      }
+
+      /* ─────────────────────────────────────────────
+       2. HAMBURGER MENU
+       ───────────────────────────────────────────── */
+      const hamburger = document.getElementById("hamburger");
+      const mobileNav = document.getElementById("mobileNav");
+
+      hamburger.addEventListener("click", () => {
+        const isOpen = hamburger.classList.toggle("open");
+        mobileNav.classList.toggle("open", isOpen);
+        hamburger.setAttribute("aria-expanded", isOpen);
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = isOpen ? "hidden" : "";
+      });
+
+      // Close mobile nav — called by onclick on each mobile link
+      function closeMobileNav() {
+        hamburger.classList.remove("open");
+        mobileNav.classList.remove("open");
+        hamburger.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
+      }
+
+      /* ─────────────────────────────────────────────
+       3. SMOOTH SCROLLING for anchor links
+       ───────────────────────────────────────────── */
+      document.querySelectorAll('a[href^="#"]').forEach((link) => {
+        link.addEventListener("click", function (e) {
+          const href = this.getAttribute("href");
+          if (href === "#") return;
+          const target = document.querySelector(href);
+          if (!target) return;
+          e.preventDefault();
+          const offset = 80; // navbar height offset
+          const top =
+            target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: "smooth" });
+        });
+      });
+
+      /* ─────────────────────────────────────────────
+       4. SCROLL REVEAL — Intersection Observer
+       ───────────────────────────────────────────── */
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              // Stop observing after reveal (one-time animation)
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.12, // Trigger when 12% of element is visible
+          rootMargin: "0px 0px -40px 0px", // Slightly before bottom of viewport
+        },
+      );
+
+      // Observe all elements with reveal classes
+      document
+        .querySelectorAll(".reveal, .reveal-left, .reveal-right")
+        .forEach((el) => {
+          revealObserver.observe(el);
+        });
+
+      /* ─────────────────────────────────────────────
+       5. FEATURED BOOKS CAROUSEL
+       ───────────────────────────────────────────── */
+      (function initCarousel() {
+        const track = document.getElementById("carouselTrack");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const dotsContainer = document.getElementById("carouselDots");
+
+        if (!track) return;
+
+        const cards = track.querySelectorAll(".fbook-card");
+        const cardWidth = 210 + 24; // card min-width + gap
+        let currentIndex = 0;
+        let visibleCards = getVisibleCount();
+        const totalSlides = Math.max(1, cards.length - visibleCards + 1);
+
+        // Build dot indicators
+        function buildDots() {
+          dotsContainer.innerHTML = "";
+          for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement("button");
+            dot.className = "carousel-dot" + (i === 0 ? " active" : "");
+            dot.setAttribute("aria-label", `Go to slide ${i + 1}`);
+            dot.addEventListener("click", () => goTo(i));
+            dotsContainer.appendChild(dot);
+          }
+        }
+
+        function getVisibleCount() {
+          // How many cards are visible based on wrapper width
+          const wrapperWidth = track.parentElement.offsetWidth;
+          return Math.floor(wrapperWidth / cardWidth) || 1;
+        }
+
+        function goTo(index) {
+          currentIndex = Math.max(0, Math.min(index, totalSlides - 1));
+          track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+          // Update dots
+          dotsContainer.querySelectorAll(".carousel-dot").forEach((dot, i) => {
+            dot.classList.toggle("active", i === currentIndex);
+          });
+        }
+
+        prevBtn.addEventListener("click", () => goTo(currentIndex - 1));
+        nextBtn.addEventListener("click", () => goTo(currentIndex + 1));
+
+        // Auto-play every 4 seconds
+        let autoPlay = setInterval(() => {
+          const next = currentIndex + 1 >= totalSlides ? 0 : currentIndex + 1;
+          goTo(next);
+        }, 4000);
+
+        // Pause auto-play on hover
+        track.addEventListener("mouseenter", () => clearInterval(autoPlay));
+        track.addEventListener("mouseleave", () => {
+          autoPlay = setInterval(() => {
+            const next = currentIndex + 1 >= totalSlides ? 0 : currentIndex + 1;
+            goTo(next);
+          }, 4000);
+        });
+
+        // Recalculate on resize
+        window.addEventListener("resize", () => {
+          visibleCards = getVisibleCount();
+          buildDots();
+          goTo(0);
+        });
+
+        buildDots();
+      })();
+
+      /* ─────────────────────────────────────────────
+       6. CONTACT FORM SUBMIT (simulated)
+       ───────────────────────────────────────────── */
+      function handleContactSubmit() {
+        const first = document.getElementById("contactFirstName").value.trim();
+        const email = document.getElementById("contactEmail").value.trim();
+        const message = document.getElementById("contactMessage").value.trim();
+
+        // Simple client-side validation
+        if (!first || !email || !message) {
+          showToast("⚠️ Please fill in the required fields.", 3500);
+          return;
+        }
+
+        // Basic email format check
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showToast("⚠️ Please enter a valid email address.", 3500);
+          return;
+        }
+
+        // Simulated success (in a real app, you'd POST to a server)
+        showToast("✓ Message sent! We'll get back to you soon.", 4000);
+
+        // Clear form fields after submit
+        [
+          "contactFirstName",
+          "contactLastName",
+          "contactEmail",
+          "contactSubject",
+          "contactMessage",
+        ].forEach((id) => {
+          document.getElementById(id).value = "";
+        });
+      }
+
+      /* ─────────────────────────────────────────────
+       7. TOAST HELPER
+       ───────────────────────────────────────────── */
+      function showToast(message, duration = 3500) {
+        const toast = document.getElementById("toast");
+        const toastMsg = document.getElementById("toastMsg");
+        toastMsg.textContent = message;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), duration);
+      }
+
+      /* ─────────────────────────────────────────────
+       8. ANIMATED COUNTER — hero stats
+       ───────────────────────────────────────────── */
+      function animateCounter(el, target, suffix = "") {
+        let start = 0;
+        const duration = 1800; // ms
+        const step = target / (duration / 16);
+
+        function update() {
+          start = Math.min(start + step, target);
+          el.textContent = Math.floor(start).toLocaleString() + suffix;
+          if (start < target) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+      }
+
+      // Trigger counters when hero is in view
+      const heroObserver = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            // Stat numbers: "10k+", "5k+", "50+"
+            const statNumbers = document.querySelectorAll(".stat-number");
+            if (statNumbers[0]) {
+              animateCounter(statNumbers[0], 10, "k+");
+              animateCounter(statNumbers[1], 5, "k+");
+              animateCounter(statNumbers[2], 50, "+");
+            }
+            heroObserver.disconnect();
+          }
+        },
+        { threshold: 0.5 },
+      );
+
+      const heroEl = document.querySelector(".hero");
+      if (heroEl) heroObserver.observe(heroEl);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ============================================================
+       Liverary — login.html
+       Role-Based Login Page
+       ============================================================ -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liverary | Login</title>
+  <link rel="icon" type="image/png" href="images/icon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Auth Styles -->
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+
+<body>
+
+  <!-- ============================================================
+       AUTH LAYOUT — Split Screen
+       ============================================================ -->
+  <div class="auth-page">
+
+    <!-- ─── LEFT DECORATIVE PANEL ─── -->
+    <div class="auth-left">
+      <div class="auth-left-quote-deco">"</div>
+
+      <!-- Floating book decorations -->
+      <div class="auth-books">
+        <div class="auth-book-tile abt-1"></div>
+        <div class="auth-book-tile abt-2"></div>
+        <div class="auth-book-tile abt-3"></div>
+        <div class="auth-book-tile abt-4"></div>
+      </div>
+
+      <!-- Logo -->
+      <div class="auth-left-logo">
+        <div class="auth-logo-icon">
+          <img src="images/icon.png" alt="Liverary Logo">
+        </div>
+        <span class="auth-logo-text">Liverary</span>
+      </div>
+
+      <!-- Hero text -->
+      <div class="auth-left-hero">
+        <div class="auth-left-tag">
+          <span class="auth-left-tag-dot"></span>
+          Welcome Back
+        </div>
+        <h1 class="auth-left-heading">
+          Your library<br/>
+          <em>awaits you</em><br/>
+          again.
+        </h1>
+        <p class="auth-left-desc">
+          Sign in to continue your reading journey. Your progress, favorites,
+          and shelves are right where you left them.
+        </p>
+
+        <!-- Feature pills -->
+        <div class="auth-left-pills">
+          <div class="auth-pill"><span class="auth-pill-icon"><i data-lucide="book-open-text"></i></span> 10,000+ Books</div>
+          <div class="auth-pill"><span class="auth-pill-icon"><i data-lucide="book-marked"></i></span> Saved Progress</div>
+          <div class="auth-pill"><span class="auth-pill-icon"><i data-lucide="heart"></i></span> Your Favorites</div>
+          <div class="auth-pill"><span class="auth-pill-icon"><i data-lucide="chart-column-stacked"></i></span> All Categories</div>
+        </div>
+      </div>
+
+      <!-- Mini testimonial -->
+      <div class="auth-left-bottom">
+        <div class="auth-testi-mini">
+          <p class="auth-testi-text">
+            "Liverary has completely transformed the way I study. Every book I need
+            is right here, instantly accessible."
+          </p>
+          <div class="auth-testi-author">
+            <div class="auth-testi-avatar">A</div>
+            <div>
+              <div class="auth-testi-name">Andrea Santos</div>
+              <div class="auth-testi-role">Graduate Student, UST</div>
+            </div>
+            <div class="auth-testi-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /auth-left -->
+
+
+    <!-- ─── RIGHT FORM PANEL ─── -->
+    <div class="auth-right">
+
+      <!-- Back to home link -->
+      <a href="index.html" class="auth-back"><i data-lucide="arrow-left"></i><span>Back to Home</span></a>
+
+      <div class="auth-form-container">
+
+        <!-- Header -->
+        <div class="auth-form-header">
+          <div class="auth-tag"><i data-lucide="shield-check"></i>Secure Login</div>  
+          <h2 class="auth-form-title">Sign In to<br/>Liverary</h2>
+          <p class="auth-form-subtitle">
+            Enter your credentials to access your library dashboard.
+          </p>
+        </div>
+
+        <!-- Demo credentials hint -->
+        <!-- <div id="demoBanner" class="auth-alert success show" style="margin-bottom:20px;">
+          <span class="auth-alert-icon"><i data-lucide="lightbulb"></i></span>
+          <div class="auth-alert-msg">
+            <strong>Demo credentials — </strong>
+            Admin: <code>admin@liverary.ph</code> / <code>Admin1234!</code> &nbsp;|&nbsp;
+            Librarian: <code>librarian@liverary.ph</code> / <code>Lib12345!</code> &nbsp;|&nbsp;
+            Member: <code>member@liverary.ph</code> / <code>Member123!</code>
+          </div>
+        </div> -->
+
+        <!-- Global alert (for errors) -->
+        <div class="auth-alert" id="loginAlert" role="alert">
+          <span class="auth-alert-icon">⚠️</span>
+          <span class="auth-alert-msg"></span>
+        </div>
+
+        <!-- Quick-fill role tabs -->
+        <!-- <div style="margin-bottom:22px;">
+          <div class="form-label" style="margin-bottom:10px;">Quick Fill Demo Account</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="quick-fill-btn" onclick="quickFill('admin')"><i data-lucide="user-round-key"></i>Admin</button>
+            <button class="quick-fill-btn" onclick="quickFill('librarian')"><i data-lucide="user-round-pen"></i> Librarian</button>
+            <button class="quick-fill-btn" onclick="quickFill('member')"><i data-lucide="user-star"></i>Member</button>
+          </div>
+        </div> -->
+
+        <!-- ─── LOGIN FORM ─── -->
+        <form id="loginForm" novalidate onsubmit="handleLogin(event)">
+
+          <!-- Email -->
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email Address</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i data-lucide="mail"></i></span>
+              <input
+                type="email"
+                id="loginEmail"
+                class="form-input"
+                placeholder="you@email.com"
+                autocomplete="email"
+                oninput="validateLoginEmail()"
+              />
+            </div>
+            <div class="field-msg hint" id="loginEmail-msg"></div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">
+              Password
+              <!-- <a href="#" class="form-label-link" onclick="showForgotPassword(event)">
+                Forgot password?
+              </a> -->
+            </label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i data-lucide="lock"></i></span>
+              <input
+                type="password"
+                id="loginPassword"
+                class="form-input"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                oninput="validateLoginPassword()"
+              />
+              <button type="button" class="input-toggle-pw" id="loginPwToggle"
+                      onclick="togglePasswordVisibility('loginPassword','loginPwToggle')"
+                      aria-label="Toggle password visibility">👁️</i></button>
+            </div>
+            <div class="field-msg hint" id="loginPassword-msg"></div>
+          </div>
+
+          <!-- Remember me -->
+          <!-- <div style="display:flex; align-items:center; gap:10px; margin-bottom:24px;">
+            <div class="custom-checkbox" id="rememberCheck" onclick="toggleRemember()"></div>
+            <span style="font-size:0.82rem; color:var(--text-muted); cursor:pointer;"
+                  onclick="toggleRemember()">
+              Remember me for 30 days
+            </span>
+          </div> -->
+
+          <!-- Submit -->
+          <button type="submit" class="btn-auth-submit" id="loginBtn">
+            <div class="btn-spinner"></div>
+            <span class="btn-label">Sign In to Liverary →</span>
+          </button>
+
+        </form>
+
+        <!-- Divider -->
+        <!-- <div class="auth-divider"><span>or continue with</span></div> -->
+
+        <!-- Social login (UI only — demo) -->
+        <!-- <div class="social-login-btns">
+          <button class="btn-social" onclick="showSocialToast()">
+            <span class="btn-social-icon"><img src="images/google-icon-logo-svgrepo-com.svg" alt="Google"></span> Google
+          </button>
+          <button class="btn-social" onclick="showSocialToast()">
+            <span class="btn-social-icon"><img src="images\facebook-color-svgrepo-com.svg" alt="Google"></span> Facebook
+          </button>
+        </div> -->
+
+        <!-- Switch to signup -->
+        <div class="auth-switch">
+          Don't have an account?
+          <a href="signup.html">Create one free →</a>
+        </div>
+
+      </div><!-- /auth-form-container -->
+    </div><!-- /auth-right -->
+
+  </div><!-- /auth-page -->
+
+  <!-- Toast notification -->
+  <div class="auth-alert" id="loginToast"
+       style="position:fixed; bottom:24px; right:24px; max-width:360px; border-radius:10px;
+              box-shadow:0 8px 32px rgba(67,48,42,0.18); z-index:9999; display:none;">
+    <span class="auth-alert-icon">ℹ️</span>
+    <span class="auth-alert-msg"></span>
+  </div>
+
+
+  <!-- ============================================================
+       AUTH LIBRARY
+       ============================================================ -->
+  <script src="js/auth.js"></script>
+
+  <!-- ============================================================
+       LOGIN PAGE SCRIPT
+       ============================================================ -->
+  <script>
+    /* ─── On page load ─── */
+    (function() {
+      // If user is already logged in, go to their dashboard
+      redirectIfLoggedIn();
+
+      // Restore remembered email
+      const remembered = localStorage.getItem('liverary_remember_email');
+      if (remembered) {
+        document.getElementById('loginEmail').value = remembered;
+        document.getElementById('rememberCheck').classList.add('checked');
+      }
+    })();
+
+    /* ─── Quick fill buttons ─── */
+    const DEMO_ACCOUNTS = {
+      admin:     { email: 'admin@liverary.ph',     password: 'Admin1234!' },
+      librarian: { email: 'librarian@liverary.ph', password: 'Lib12345!' },
+      member:    { email: 'member@liverary.ph',     password: 'Member123!' },
+    };
+
+    function quickFill(role) {
+      const creds = DEMO_ACCOUNTS[role];
+      if (!creds) return;
+      document.getElementById('loginEmail').value    = creds.email;
+      document.getElementById('loginPassword').value = creds.password;
+      // Trigger visual validation
+      validateLoginEmail();
+      validateLoginPassword();
+      // Hide demo banner
+      document.getElementById('demoBanner').style.display = 'none';
+    }
+
+    /* ─── Remember-me toggle ─── */
+    let rememberMe = !!localStorage.getItem('liverary_remember_email');
+
+    function toggleRemember() {
+      rememberMe = !rememberMe;
+      document.getElementById('rememberCheck').classList.toggle('checked', rememberMe);
+    }
+
+    /* ─── Field Validation ─── */
+    function validateLoginEmail() {
+      const val = document.getElementById('loginEmail').value;
+      if (!isNotEmpty(val)) {
+        setInputState('loginEmail', '');
+        setFieldMsg('loginEmail', '', '');
+        return false;
+      }
+      if (!isValidEmail(val)) {
+        setInputState('loginEmail', 'error');
+        setFieldMsg('loginEmail', 'error', '✗ Please enter a valid email address.');
+        return false;
+      }
+      setInputState('loginEmail', 'valid');
+      setFieldMsg('loginEmail', 'success', '✓ Looks good!');
+      return true;
+    }
+
+    function validateLoginPassword() {
+      const val = document.getElementById('loginPassword').value;
+      if (!isNotEmpty(val)) {
+        setInputState('loginPassword', '');
+        setFieldMsg('loginPassword', '', '');
+        return false;
+      }
+      if (val.length < MIN_PASSWORD_LEN) {
+        setInputState('loginPassword', 'error');
+        setFieldMsg('loginPassword', 'error', `✗ Password must be at least ${MIN_PASSWORD_LEN} characters.`);
+        return false;
+      }
+      setInputState('loginPassword', 'valid');
+      setFieldMsg('loginPassword', '', '');
+      return true;
+    }
+
+    /* ─── Main Login Handler ─── */
+    function handleLogin(e) {
+      e.preventDefault();
+      hideAlert('loginAlert');
+
+      const email    = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      // Client-side validation
+      const emailOk = validateLoginEmail();
+      const pwOk    = validateLoginPassword();
+
+      if (!emailOk || !pwOk) {
+        showAlert('loginAlert', 'error', 'Incorrect Email or Password. Please put correct credentials.');
+        return;
+      }
+
+      // Simulate a short network delay for realism
+      setBtnLoading('loginBtn', true);
+
+      setTimeout(() => {
+        const result = loginUser(email, password);
+        setBtnLoading('loginBtn', false);
+
+        if (!result.ok) {
+          showAlert('loginAlert', 'error', result.error);
+          setInputState('loginEmail',    'error');
+          setInputState('loginPassword', 'error');
+          return;
+        }
+
+        // Save session
+        saveSession(result.user);
+
+        // Remember email if requested
+        if (rememberMe) {
+          localStorage.setItem('liverary_remember_email', email);
+        } else {
+          localStorage.removeItem('liverary_remember_email');
+        }
+
+        // Show success briefly before redirecting
+        showAlert('loginAlert', 'success',
+          `✓ Welcome back, ${result.user.firstName}! Redirecting to your dashboard...`);
+
+        setTimeout(() => {
+          window.location.href = DASHBOARDS[result.user.role];
+        }, 900);
+
+      }, 700); // 700ms simulated delay
+    }
+
+    /* ─── Forgot password (simulated) ─── */
+    function showForgotPassword(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      if (!email || !isValidEmail(email)) {
+        showToastMsg('info', '📧 Enter your email above, then click Forgot Password.');
+        return;
+      }
+      showToastMsg('success', `✓ If an account exists for ${email}, a reset link was sent.`);
+    }
+
+    /* ─── Social login toast ─── */
+    function showSocialToast() {
+      showToastMsg('info', '🚧 Social login is coming soon!');
+    }
+
+    /* ─── Toast helper ─── */
+    function showToastMsg(type, msg) {
+      const toast = document.getElementById('loginToast');
+      toast.className = 'auth-alert show ' + (type === 'success' ? 'success' : 'error');
+      toast.style.display = 'flex';
+      toast.querySelector('.auth-alert-icon').textContent = type === 'success' ? '✓' : 'ℹ️';
+      toast.querySelector('.auth-alert-msg').textContent  = msg;
+      setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }
+  </script>
+
+  <!-- Quick fill button styles (scoped) -->
+  <style>
+    code {
+      font-family: monospace;
+      background: rgba(196,150,44,0.15);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+    }
+    .quick-fill-btn {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1.5px solid rgba(67,48,42,0.15);
+      background: white;
+      color: var(--brown-dark);
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .quick-fill-btn:hover {
+      border-color: var(--gold);
+      background: rgba(196,150,44,0.06);
+      color: var(--brown-mid);
+    }
+  </style>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>

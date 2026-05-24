@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ============================================================
+       Liverary — admin-dashboard.html
+       Admin Role Dashboard
+       Features: Analytics · Manage Users · Manage Books ·
+                 System Settings · Admin Profile
+       ============================================================ -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liverary | Admin Dashboard</title>
+  <link rel="icon" type="image/png" href="images/icon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Shared Dashboard CSS -->
+  <link rel="stylesheet" href="css/dashboard.css" />
+
+  <!-- Admin-specific styles -->
+  <style>
+    /* ── Extra button variants ── */
+    .btn-warning {
+      background: rgba(184,122,16,0.10);
+      color: var(--warning);
+      border: 1px solid rgba(184,122,16,0.25);
+    }
+    .btn-warning:hover { background: var(--warning); color: white; border-color: var(--warning); }
+
+    .btn-success-sm {
+      background: rgba(46,125,82,0.10);
+      color: var(--success);
+      border: 1px solid rgba(46,125,82,0.25);
+    }
+    .btn-success-sm:hover { background: var(--success); color: white; }
+
+    button:disabled {
+      opacity: 0.38;
+      pointer-events: none;
+    }
+
+    /* ── Tables ── */
+    .adm-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+    .adm-table thead th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background: var(--cream);
+      border-bottom: 1px solid rgba(196,150,44,0.12);
+      white-space: nowrap;
+    }
+    .table-row td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(67,48,42,0.05);
+      vertical-align: middle;
+    }
+    .table-row:last-child td { border-bottom: none; }
+    .table-row:hover td { background: rgba(196,150,44,0.03); }
+    .table-scroll { overflow-x: auto; }
+
+    /* ── Cover swatches (book modal) ── */
+    .cover-swatches { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .adm-cover-swatch {
+      width: 34px; height: 46px;
+      border-radius: 3px 8px 8px 3px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition);
+      position: relative;
+    }
+    .adm-cover-swatch:hover { transform: scale(1.09); }
+    .adm-cover-swatch.selected {
+      border-color: white;
+      box-shadow: 0 0 0 3px var(--gold);
+      transform: scale(1.13);
+    }
+    .adm-cover-swatch.selected::after {
+      content: '✓';
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 0.8rem; font-weight: 700;
+      background: rgba(0,0,0,0.22);
+      border-radius: 1px 6px 6px 1px;
+    }
+    .cover-preview-box {
+      width: 64px; height: 88px;
+      border-radius: 4px 11px 11px 4px;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    /* ── Toggle switch ── */
+    .toggle-switch { position:relative; display:inline-block; width:44px; height:24px; cursor:pointer; }
+    .toggle-switch input { opacity:0; width:0; height:0; }
+    .toggle-track { position:absolute; inset:0; border-radius:24px; background:rgba(67,48,42,0.15); transition:var(--transition); }
+    .toggle-switch input:checked + .toggle-track { background: var(--gold); }
+    .toggle-thumb { position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:white; box-shadow:0 1px 4px rgba(0,0,0,0.18); transition:var(--transition); }
+    .toggle-switch input:checked ~ .toggle-thumb { left:23px; }
+
+    /* ── Rating range ── */
+    input[type="range"] { -webkit-appearance:none; appearance:none; width:100%; height:5px; border-radius:3px; background:rgba(67,48,42,0.12); outline:none; cursor:pointer; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:var(--gold); box-shadow:0 2px 6px rgba(196,150,44,0.35); }
+
+    /* ── System info card ── */
+    .sys-info-card {
+      background: var(--cream);
+      border: 1px solid rgba(196,150,44,0.15);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .sys-info-icon {
+      width: 42px; height: 42px;
+      background: rgba(196,150,44,0.12);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem; flex-shrink: 0;
+    }
+    .sys-info-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--brown-dark);
+      line-height: 1;
+    }
+    .sys-info-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; margin-top: 3px; }
+
+    /* ── Danger zone ── */
+    .danger-card {
+      background: white;
+      border: 1px solid rgba(201,64,64,0.22);
+      border-radius: var(--radius-md);
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .danger-card-title { font-size: 0.88rem; font-weight: 700; color: var(--error); margin-bottom: 3px; }
+    .danger-card-desc  { font-size: 0.78rem; color: var(--text-muted); max-width: 380px; line-height: 1.55; }
+  </style>
+</head>
+
+<body>
+<div class="dashboard-shell">
+
+  <!-- ═══════════════════════════════════════
+       SIDEBAR
+       ═══════════════════════════════════════ -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <img src="images/icon.png" alt="Liverary Logo">
+      </div>
+      <span class="sidebar-logo-text">Liverary</span>
+    </div>
+
+    <!-- Admin user strip -->
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" data-admin-avatar>A</div>
+      <div style="min-width:0;">
+        <div class="sidebar-user-name" data-admin-name>Admin</div>
+        <div class="sidebar-user-role">Administrator</div>
+      </div>
+      <div class="sidebar-role-badge" style="background:rgba(67,48,42,0.25); color:var(--gold-light);">Admin</div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="sidebar-section-label">Dashboard</div>
+    <ul class="sidebar-nav">
+      <li>
+        <a href="#" data-section="adm-home" class="active"
+           onclick="adminSwitch('adm-home'); return false;">
+          <span class="nav-icon"><i data-lucide="chart-column"></i></span> Analytics
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-section-label">Management</div>
+    <ul class="sidebar-nav">
+      <li>
+        <a href="#" data-section="adm-users"
+           onclick="adminSwitch('adm-users'); return false;">
+          <span class="nav-icon"><i data-lucide="users-round"></i></span> Manage Users
+        </a>
+      </li>
+      <li>
+        <a href="#" data-section="adm-books"
+           onclick="adminSwitch('adm-books'); return false;">
+          <span class="nav-icon"><i data-lucide="book-copy"></i></span> Manage Books
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-section-label">System</div>
+    <ul class="sidebar-nav">
+      <li>
+        <a href="#" data-section="adm-settings"
+           onclick="adminSwitch('adm-settings'); return false;">
+          <span class="nav-icon"><i data-lucide="settings"></i></span> System Settings
+        </a>
+      </li>
+      <li>
+        <a href="#" data-section="adm-profile"
+           onclick="adminSwitch('adm-profile'); return false;">
+          <span class="nav-icon"><i data-lucide="user-round-key"></i></span> My Profile
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-bottom">
+      <button class="btn-sidebar-logout" onclick="handleAdminLogout()">
+        <span class="nav-icon"><i data-lucide="log-out"></i></span> Logout
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeMobileAdminSidebar()"></div>
+
+  <!-- ═══════════════════════════════════════
+       MAIN CONTENT
+       ═══════════════════════════════════════ -->
+  <main class="dashboard-main">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-menu-btn" onclick="openMobileAdminSidebar()" aria-label="Open menu">☰</button>
+        <div>
+          <div class="topbar-title"    id="topbar-title">Analytics Overview</div>
+          <div class="topbar-subtitle" id="topbar-subtitle">System-wide statistics &amp; activity</div>
+        </div>
+      </div>
+
+      <!-- Global search -->
+      <div class="topbar-search">
+        <span class="topbar-search-icon"><i data-lucide="search"></i></span>
+        <input type="text" placeholder="Search users, books…"
+               id="topbar-adm-search"
+               onkeyup="handleAdminTopSearch(this.value)"
+               aria-label="Global search" />
+      </div>
+
+      <div class="topbar-right">
+        <!-- Quick add -->
+        <button class="btn btn-gold btn-sm" onclick="openAddUserModal()" style="gap:5px;">
+          <i data-lucide="user-round-plus"></i> Add User
+        </button>
+
+        <!-- Profile chip -->
+        <div class="topbar-profile" onclick="adminSwitch('adm-profile')">
+          <div class="topbar-avatar" data-admin-avatar>A</div>
+          <div class="topbar-user-name" data-admin-first>Admin</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════
+         PAGE CONTENT
+         ═══════════════════════════════════════ -->
+    <div class="page-content">
+
+      <!-- ────────────────────────────────────────
+           SECTION: ANALYTICS OVERVIEW
+           ──────────────────────────────────────── -->
+      <section class="page-section active" id="section-adm-home">
+
+        <!-- Welcome banner -->
+        <div class="welcome-banner" style="background:linear-gradient(130deg, var(--brown-dark) 0%, #3d2820 50%, #5a3820 100%);
+                    border-radius:var(--radius-lg); padding:26px 32px; margin-bottom:24px;
+                    overflow:hidden; position:relative;">
+          <div style="position:absolute; right:-50px; top:-50px; width:260px; height:260px;
+                      background:radial-gradient(circle,rgba(196,150,44,0.14),transparent 70%);
+                      border-radius:50%; pointer-events:none;"></div>
+          <div style="position:absolute; left:40%; bottom:-60px; width:200px; height:200px;
+                      background:radial-gradient(circle,rgba(196,150,44,0.06),transparent 70%);
+                      border-radius:50%; pointer-events:none;"></div>
+          <div style="position:relative; z-index:1;">
+            <div style="font-size:0.68rem; font-weight:700; letter-spacing:0.18em;
+                        text-transform:uppercase; color:var(--gold-light); margin-bottom:8px;">
+              <i data-lucide="user-round-key"></i> Administrator Portal
+            </div>
+            <h2 style="font-family:'Playfair Display',serif; font-size:1.7rem;
+                       color:var(--cream); font-weight:800; margin-bottom:5px;"
+                data-admin-name>Admin</h2>
+            <p style="font-size:0.86rem; color:rgba(255,250,235,0.55); max-width:380px;">
+              Full system control. Manage users, books, and all platform settings from here.
+            </p>
+          </div>
+          <div class="welcome-banner-actions">
+            <button class="btn btn-sm"
+                    onclick="adminSwitch('adm-users')"
+                    style="background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22);
+                           color:white; border-radius:8px; padding:9px 18px; font-size:0.8rem; font-weight:600;">
+              <i data-lucide="users-round"></i> Manage Users
+            </button>
+            <button class="btn btn-sm"
+                    onclick="adminSwitch('adm-books')"
+                    style="background:rgba(196,150,44,0.22); border:1px solid rgba(196,150,44,0.35);
+                           color:var(--gold-pale); border-radius:8px; padding:9px 18px; font-size:0.8rem; font-weight:600;">
+              <i data-lucide="book-copy"></i> Manage Books
+            </button>
+          </div>
+        </div>
+
+        <!-- 8 stat cards -->
+        <div class="stat-cards-grid" style="margin-bottom:24px;">
+
+          <div class="stat-card">
+            <div class="stat-card-icon gold"><i data-lucide="users-round"></i></div>
+            <div class="stat-card-value" id="adm-stat-users">0</div>
+            <div class="stat-card-label">Total Users</div>
+            <div class="stat-card-change new">All roles</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon brown"><i data-lucide="user-round"></i></div>
+            <div class="stat-card-value" id="adm-stat-members">0</div>
+            <div class="stat-card-label">Members</div>
+            <div class="stat-card-change up">Readers</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon olive"><i data-lucide="user-round-pen"></i></div>
+            <div class="stat-card-value" id="adm-stat-libs">0</div>
+            <div class="stat-card-label">Librarians</div>
+            <div class="stat-card-change new">Curators</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon green"><i data-lucide="check"></i></div>
+            <div class="stat-card-value" id="adm-stat-active">0</div>
+            <div class="stat-card-label">Active Accounts</div>
+            <div class="stat-card-change up">Online</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon gold"><i data-lucide="book-open-text"></i></div>
+            <div class="stat-card-value" id="adm-stat-books">0</div>
+            <div class="stat-card-label">Total Books</div>
+            <div class="stat-card-change new">Library</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon brown"><i data-lucide="star"></i></div>
+            <div class="stat-card-value" id="adm-stat-featured">0</div>
+            <div class="stat-card-label">Featured Books</div>
+            <div class="stat-card-change new">Promoted</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon olive"><i data-lucide="eye"></i></div>
+            <div class="stat-card-value" id="adm-stat-views">0</div>
+            <div class="stat-card-label">Total Views</div>
+            <div class="stat-card-change up">All time</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-icon green"><i data-lucide="chart-column-stacked"></i></div>
+            <div class="stat-card-value" id="adm-stat-cats">0</div>
+            <div class="stat-card-label">Categories</div>
+            <div class="stat-card-change new">Genres</div>
+          </div>
+
+        </div>
+
+        <!-- Charts + tables row -->
+        <div class="grid-2" style="margin-bottom:22px;">
+
+          <!-- Role distribution -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><i data-lucide="users-round"></i> User Role Distribution</div>
+              <button class="btn btn-outline btn-sm" onclick="adminSwitch('adm-users')">
+                View All
+              </button>
+            </div>
+            <div class="panel-body" id="role-dist-wrap">
+              <!-- rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Top books by views -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><i data-lucide="flame"></i> Most Viewed Books</div>
+              <button class="btn btn-outline btn-sm" onclick="adminSwitch('adm-books')">
+                View All
+              </button>
+            </div>
+            <div class="panel-body" id="top-books-chart">
+              <!-- rendered by JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <div class="grid-2">
+
+          <!-- Recent registered users -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><i data-lucide="clock-fading"></i> Recently Registered</div>
+              <button class="btn btn-outline btn-sm" onclick="adminSwitch('adm-users')">
+                Manage
+              </button>
+            </div>
+            <div class="table-scroll">
+              <table class="adm-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Joined</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-users-table">
+                  <!-- rendered by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Activity feed -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><i data-lucide="activity"></i> System Activity</div>
+            </div>
+            <div class="panel-body" id="admin-activity-feed">
+              <!-- rendered by JS -->
+            </div>
+          </div>
+
+        </div>
+
+      </section><!-- /section-adm-home -->
+
+
+      <!-- ────────────────────────────────────────
+           SECTION: MANAGE USERS
+           ──────────────────────────────────────── -->
+      <section class="page-section" id="section-adm-users">
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><i data-lucide="users-round"></i> All Users</div>
+              <div id="users-count"
+                   style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Loading…</div>
+            </div>
+            <button class="btn btn-gold" onclick="openAddUserModal()">
+              <i data-lucide="user-round-plus"></i> Add New User
+            </button>
+          </div>
+
+          <!-- Filter bar -->
+          <div class="panel-body" style="padding-bottom:0; border-bottom:1px solid rgba(196,150,44,0.08);">
+            <div class="filter-bar">
+              <div class="filter-search" style="flex:2;">
+                <span><i data-lucide="search"></i></span>
+                <input type="text" id="users-search"
+                       placeholder="Search name or email…"
+                       oninput="renderUsersTable(this.value,
+                                  document.getElementById('users-role-filter').value,
+                                  document.getElementById('users-status-filter').value)"
+                       aria-label="Search users" />
+              </div>
+              <select class="filter-select" id="users-role-filter"
+                      onchange="renderUsersTable(
+                                  document.getElementById('users-search').value,
+                                  this.value,
+                                  document.getElementById('users-status-filter').value)">
+                <option value="all">All Roles</option>
+                <option value="admin">Admin</option>
+                <option value="librarian">Librarian</option>
+                <option value="member">Member</option>
+              </select>
+              <select class="filter-select" id="users-status-filter"
+                      onchange="renderUsersTable(
+                                  document.getElementById('users-search').value,
+                                  document.getElementById('users-role-filter').value,
+                                  this.value)">
+                <option value="all">All Status</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="table-scroll">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th style="min-width:220px;">User</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Joined</th>
+                  <th>ID</th>
+                  <th style="min-width:230px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body">
+                <!-- rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </section><!-- /section-adm-users -->
+
+
+      <!-- ────────────────────────────────────────
+           SECTION: MANAGE BOOKS
+           ──────────────────────────────────────── -->
+      <section class="page-section" id="section-adm-books">
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><i data-lucide="book-copy"></i>Book Library</div>
+              <div id="adm-books-count"
+                   style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Loading…</div>
+            </div>
+            <button class="btn btn-gold" onclick="openAddAdminBookModal()">
+              <i data-lucide="book-up"></i> Add New Book
+            </button>
+          </div>
+
+          <!-- Filter bar -->
+          <div class="panel-body" style="padding-bottom:0; border-bottom:1px solid rgba(196,150,44,0.08);">
+            <div class="filter-bar">
+              <div class="filter-search" style="flex:2;">
+                <span><i data-lucide="search"></i></span>
+                <input type="text" id="adm-books-search"
+                       placeholder="Search title, author, category…"
+                       oninput="renderAdminBooks(this.value,
+                                  document.getElementById('adm-books-cat').value,
+                                  document.getElementById('adm-books-filter').value)"
+                       aria-label="Search books" />
+              </div>
+              <select class="filter-select" id="adm-books-cat"
+                      onchange="renderAdminBooks(
+                                  document.getElementById('adm-books-search').value,
+                                  this.value,
+                                  document.getElementById('adm-books-filter').value)">
+                <!-- populated by JS -->
+              </select>
+              <select class="filter-select" id="adm-books-filter"
+                      onchange="renderAdminBooks(
+                                  document.getElementById('adm-books-search').value,
+                                  document.getElementById('adm-books-cat').value,
+                                  this.value)">
+                <option value="all">All Books</option>
+                <option value="featured">⭐ Featured Only</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="table-scroll">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th style="min-width:220px;">Book</th>
+                  <th>Category</th>
+                  <th>Rating</th>
+                  <th>Views</th>
+                  <th style="min-width:160px;">Uploaded By</th>
+                  <th>Featured</th>
+                  <th style="min-width:110px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adm-books-tbody">
+                <!-- rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </section><!-- /section-adm-books -->
+
+
+      <!-- ────────────────────────────────────────
+           SECTION: SYSTEM SETTINGS
+           ──────────────────────────────────────── -->
+      <section class="page-section" id="section-adm-settings">
+
+        <div class="settings-container" style="max-width:860px;">
+
+          <!-- System overview cards -->
+          <div class="panel" style="margin-bottom:22px;">
+            <div class="panel-header">
+              <div class="panel-title"><i data-lucide="laptop"></i> System Overview</div>
+              <button class="btn btn-outline btn-sm" onclick="renderSystemStats()"><i data-lucide="refresh-ccw"></i> Refresh</button>
+            </div>
+            <div class="panel-body">
+              <div class="sys-overview-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px;">
+                <div class="sys-info-card">
+                  <div class="sys-info-icon"><i data-lucide="users-round"></i></div>
+                  <div>
+                    <div class="sys-info-value" id="sys-total-accounts">0</div>
+                    <div class="sys-info-label">Total Accounts</div>
+                  </div>
+                </div>
+                <div class="sys-info-card">
+                  <div class="sys-info-icon"><i data-lucide="book-copy"></i></div>
+                  <div>
+                    <div class="sys-info-value" id="sys-total-books">0</div>
+                    <div class="sys-info-label">Total Books</div>
+                  </div>
+                </div>
+                <div class="sys-info-card">
+                  <div class="sys-info-icon"><i data-lucide="chart-column-stacked"></i></div>
+                  <div>
+                    <div class="sys-info-value" id="sys-total-cats">0</div>
+                    <div class="sys-info-label">Categories</div>
+                  </div>
+                </div>
+                <div class="sys-info-card">
+                  <div class="sys-info-icon"><i data-lucide="heart"></i></div>
+                  <div>
+                    <div class="sys-info-value" id="sys-total-favs">0</div>
+                    <div class="sys-info-label">Total Favorites</div>
+                  </div>
+                </div>
+                <div class="sys-info-card">
+                  <div class="sys-info-icon"><i data-lucide="book-open-text"></i></div>
+                  <div>
+                    <div class="sys-info-value" id="sys-total-progress">0</div>
+                    <div class="sys-info-label">Reading Progress Entries</div>
+                  </div>
+                </div>
+                <div class="sys-info-card">
+                  <div class="sys-info-icon"><i data-lucide="save"></i></div>
+                  <div>
+                    <div class="sys-info-value" id="sys-storage-size">0 KB</div>
+                    <div class="sys-info-label">Storage Used</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data management -->
+          <div class="panel" style="margin-bottom:22px;">
+            <div class="panel-header">
+              <div class="panel-title"><i data-lucide="database"></i> Data Management</div>
+            </div>
+            <div class="panel-body">
+              <div style="display:flex; flex-direction:column; gap:14px;">
+
+                <!-- Export -->
+                <div style="display:flex; align-items:center; justify-content:space-between;
+                            padding:16px 18px; background:var(--cream);
+                            border-radius:var(--radius-md); border:1px solid rgba(196,150,44,0.15);
+                            flex-wrap:wrap; gap:10px;">
+                  <div>
+                    <div style="font-size:0.88rem; font-weight:700; color:var(--brown-dark); margin-bottom:3px;">
+                      <i data-lucide="file-down"></i> Export Library Data
+                    </div>
+                    <div style="font-size:0.76rem; color:var(--text-muted);">
+                      Download all accounts (no passwords), books, and categories as a JSON file.
+                    </div>
+                  </div>
+                  <button class="btn btn-gold btn-sm" onclick="exportData()">⬇ Export JSON</button>
+                </div>
+
+                <!-- Clear reading progress -->
+                <div class="danger-card">
+                  <div>
+                    <div class="danger-card-title"><i data-lucide="trash2"></i> Clear All Reading Progress</div>
+                    <div class="danger-card-desc">
+                      Removes all reading progress records for every member. Books and accounts remain intact.
+                    </div>
+                  </div>
+                  <button class="btn btn-danger btn-sm" onclick="clearAllReadingData()">Clear Progress</button>
+                </div>
+
+                <!-- Clear favorites -->
+                <div class="danger-card">
+                  <div>
+                    <div class="danger-card-title"><i data-lucide="heart-minus"></i> Clear All Favorites</div>
+                    <div class="danger-card-desc">
+                      Removes all saved favorites for every member. Books and accounts remain intact.
+                    </div>
+                  </div>
+                  <button class="btn btn-danger btn-sm" onclick="clearAllFavoritesData()">Clear Favorites</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Factory reset -->
+          <div class="panel" style="border-color:rgba(201,64,64,0.25);">
+            <div class="panel-header" style="border-bottom-color:rgba(201,64,64,0.12);">
+              <div class="panel-title" style="color:var(--error);">⚠️ Danger Zone</div>
+            </div>
+            <div class="panel-body">
+              <div class="danger-card" style="border-color:rgba(201,64,64,0.3);">
+                <div>
+                  <div class="danger-card-title"><i data-lucide="monitor-cog"></i> Factory Reset</div>
+                  <div class="danger-card-desc">
+                    Permanently deletes ALL data — accounts, books, categories, progress, and favorites —
+                    and restores the original demo dataset. <strong>This cannot be undone.</strong>
+                  </div>
+                </div>
+                <button class="btn btn-danger" onclick="resetToDefaults()"><i data-lucide="refresh-ccw"></i> Reset System</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section><!-- /section-adm-settings -->
+
+
+      <!-- ────────────────────────────────────────
+           SECTION: ADMIN PROFILE
+           ──────────────────────────────────────── -->
+      <section class="page-section" id="section-adm-profile">
+        <div class="grid-2" style="max-width:880px; align-items:start;">
+
+          <!-- Profile card -->
+          <div class="panel">
+            <div class="panel-body" style="text-align:center; padding:34px 24px;">
+              <div style="width:88px; height:88px; border-radius:50%; margin:0 auto 16px;
+                          background:linear-gradient(135deg,var(--brown-dark),var(--gold));
+                          display:flex; align-items:center; justify-content:center;
+                          font-family:'Playfair Display',serif; font-size:2rem; font-weight:700;
+                          color:white; box-shadow:var(--shadow-md);"
+                   id="adm-profile-avatar">A</div>
+
+              <h3 style="font-size:1.3rem; margin-bottom:4px;" id="adm-profile-name">Admin</h3>
+              <p style="font-size:0.84rem; margin-bottom:10px;" id="adm-profile-email">—</p>
+
+              <!-- Admin badge -->
+              <div style="display:inline-flex; align-items:center; gap:7px;
+                          background:rgba(67,48,42,0.10); border:1px solid rgba(67,48,42,0.18);
+                          border-radius:20px; padding:5px 14px; font-size:0.75rem;
+                          font-weight:700; color:var(--brown-dark); margin-bottom:20px;">
+                <i data-lucide="user-round-key"></i> System Administrator
+              </div>
+
+              <!-- Quick stats -->
+              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;
+                          padding:16px; background:var(--cream); border-radius:var(--radius-md);">
+                <div>
+                  <div style="font-family:'Playfair Display',serif; font-size:1.35rem;
+                               font-weight:700; color:var(--brown-dark);"
+                       id="adm-pstat-users">—</div>
+                  <div style="font-size:0.68rem; color:var(--text-muted);">Total Users</div>
+                </div>
+                <div>
+                  <div style="font-family:'Playfair Display',serif; font-size:1.35rem;
+                               font-weight:700; color:var(--brown-dark);"
+                       id="adm-pstat-books">—</div>
+                  <div style="font-size:0.68rem; color:var(--text-muted);">Books</div>
+                </div>
+                <div>
+                  <div style="font-family:'Playfair Display',serif; font-size:1.35rem;
+                               font-weight:700; color:var(--brown-dark);"
+                       id="adm-pstat-libs">—</div>
+                  <div style="font-size:0.68rem; color:var(--text-muted);">Librarians</div>
+                </div>
+              </div>
+
+              <div style="font-size:0.74rem; color:var(--text-muted); margin-top:12px;">
+                Admin since <strong id="adm-profile-joined">—</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit form -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><i data-lucide="pencil"></i> Edit Profile</div>
+            </div>
+            <div class="panel-body">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+                <div class="form-group">
+                  <label class="form-label-dash">First Name</label>
+                  <input type="text" class="form-input-dash" id="adm-edit-first" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label-dash">Last Name</label>
+                  <input type="text" class="form-input-dash" id="adm-edit-last" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label-dash">Email Address</label>
+                <input type="email" class="form-input-dash" id="adm-edit-email" />
+              </div>
+              <div style="display:flex; gap:10px;">
+                <button class="btn btn-gold" onclick="saveAdminProfile()"><i data-lucide="save"></i> Save Changes</button>
+                <button class="btn btn-outline" onclick="renderAdminProfile()">Reset</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section><!-- /section-adm-profile -->
+
+    </div><!-- /page-content -->
+  </main>
+</div><!-- /dashboard-shell -->
+
+
+<!-- ═══════════════════════════════════════════════════
+     USER ADD / EDIT MODAL
+     ═══════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="user-modal" role="dialog" aria-modal="true" aria-label="User form">
+  <div class="modal-box" style="max-width:520px;">
+
+    <div class="modal-header">
+      <div class="modal-title" id="umodal-title"><i data-lucide="pencil"></i> Edit User</div>
+      <button class="modal-close" onclick="closeUserModal()">✕</button>
+    </div>
+
+    <form onsubmit="handleUserFormSubmit(event)" novalidate>
+      <div class="modal-body">
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="form-group">
+            <label class="form-label-dash">First Name <span style="color:var(--error);">*</span></label>
+            <input type="text" class="form-input-dash" id="umodal-first" placeholder="First name" />
+          </div>
+          <div class="form-group">
+            <label class="form-label-dash">Last Name <span style="color:var(--error);">*</span></label>
+            <input type="text" class="form-input-dash" id="umodal-last" placeholder="Last name" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label-dash">Email Address <span style="color:var(--error);">*</span></label>
+          <input type="email" class="form-input-dash" id="umodal-email" placeholder="user@email.com" />
+        </div>
+
+        <!-- Password row (shown for new users) -->
+        <div class="form-group" id="umodal-pw-row" style="display:none;">
+          <label class="form-label-dash">Password <span style="color:var(--error);">*</span></label>
+          <input type="password" class="form-input-dash" id="umodal-password"
+                 placeholder="Min. 8 characters" />
+        </div>
+
+        <!-- Password row for edit (optional) -->
+        <div class="form-group" id="umodal-pw-edit-row">
+          <label class="form-label-dash">New Password <span style="font-size:0.7rem; color:var(--text-muted); font-weight:400;">(leave blank to keep current)</span></label>
+          <input type="password" class="form-input-dash" id="umodal-password"
+                 placeholder="Leave blank to keep current password" />
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="form-group">
+            <label class="form-label-dash">Role</label>
+            <select class="form-input-dash" id="umodal-role">
+              <option value="member"><i data-lucide="user-round"></i> Member</option>
+              <option value="librarian"><i data-lucide="user-round-pen"></i>Librarian</option>
+              <option value="admin"><i data-lucide="user-round-pen"></i>Admin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label-dash">Status</label>
+            <div style="display:flex; align-items:center; gap:12px; margin-top:8px;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="umodal-active"
+                       onchange="document.getElementById('umodal-active-label').textContent = this.checked ? 'Active' : 'Inactive'" />
+                <span class="toggle-track"></span>
+                <span class="toggle-thumb"></span>
+              </label>
+              <span style="font-size:0.85rem; font-weight:600; color:var(--brown-dark);"
+                    id="umodal-active-label">Active</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeUserModal()">Cancel</button>
+        <button type="submit" class="btn btn-gold"><i data-lucide="save"></i> Save User</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     BOOK ADD / EDIT MODAL
+     ═══════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="adm-book-modal" role="dialog" aria-modal="true" aria-label="Book form">
+  <div class="modal-box" style="max-width:600px;">
+
+    <div class="modal-header">
+      <div class="modal-title" id="adm-bmodal-title"><i data-lucide="book-up"></i> Add New Book</div>
+      <button class="modal-close" onclick="closeAdminBookModal()">✕</button>
+    </div>
+
+    <form onsubmit="handleAdminBookSubmit(event)" novalidate>
+      <div class="modal-body">
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="form-group">
+            <label class="form-label-dash">Title <span style="color:var(--error);">*</span></label>
+            <input type="text" class="form-input-dash" id="adm-bform-title" placeholder="Book title" />
+          </div>
+          <div class="form-group">
+            <label class="form-label-dash">Author <span style="color:var(--error);">*</span></label>
+            <input type="text" class="form-input-dash" id="adm-bform-author" placeholder="Author name" />
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="form-group">
+            <label class="form-label-dash">Category</label>
+            <select class="form-input-dash" id="adm-bform-category">
+              <!-- populated by JS -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label-dash">Pages <span style="color:var(--error);">*</span></label>
+            <input type="number" class="form-input-dash" id="adm-bform-pages" placeholder="e.g. 320" min="1" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label-dash" style="display:flex; justify-content:space-between;">
+            <span>Rating</span>
+            <span id="adm-brating-display" style="color:var(--gold); font-weight:700;">4.5 ★</span>
+          </label>
+          <input type="range" id="adm-bform-rating" min="1" max="5" step="0.1" value="4.5"
+                 oninput="document.getElementById('adm-brating-display').textContent=(+this.value).toFixed(1)+' ★'" />
+          <div style="display:flex; justify-content:space-between; font-size:0.67rem; color:var(--text-muted); margin-top:2px;">
+            <span>1 — Poor</span><span>5 — Excellent</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label-dash">Description</label>
+          <textarea class="form-input-dash" id="adm-bform-description" rows="3"
+                    placeholder="Brief book summary…" style="resize:vertical;"></textarea>
+        </div>
+
+        <!-- Cover picker + preview -->
+        <div class="form-group">
+          <label class="form-label-dash" style="margin-bottom:10px;">Cover Colour</label>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div class="cover-preview-box bc-1" id="adm-cover-preview"></div>
+            <div class="cover-swatches">
+              <div class="adm-cover-swatch bc-1 selected" data-cover="bc-1" onclick="admSelectCover('bc-1')"></div>
+              <div class="adm-cover-swatch bc-2"           data-cover="bc-2" onclick="admSelectCover('bc-2')"></div>
+              <div class="adm-cover-swatch bc-3"           data-cover="bc-3" onclick="admSelectCover('bc-3')"></div>
+              <div class="adm-cover-swatch bc-4"           data-cover="bc-4" onclick="admSelectCover('bc-4')"></div>
+              <div class="adm-cover-swatch bc-5"           data-cover="bc-5" onclick="admSelectCover('bc-5')"></div>
+              <div class="adm-cover-swatch bc-6"           data-cover="bc-6" onclick="admSelectCover('bc-6')"></div>
+              <div class="adm-cover-swatch bc-7"           data-cover="bc-7" onclick="admSelectCover('bc-7')"></div>
+              <div class="adm-cover-swatch bc-8"           data-cover="bc-8" onclick="admSelectCover('bc-8')"></div>
+            </div>
+          </div>
+          <input type="hidden" id="adm-selected-cover" value="bc-1" />
+        </div>
+
+        <!-- Featured toggle -->
+        <div style="display:flex; align-items:center; justify-content:space-between;
+                    padding:14px 16px; background:var(--cream); border-radius:var(--radius-sm);
+                    border:1px solid rgba(196,150,44,0.15);">
+          <div>
+            <div style="font-size:0.85rem; font-weight:600; color:var(--brown-dark);">⭐ Feature this book</div>
+            <div style="font-size:0.73rem; color:var(--text-muted);">Appears on homepage &amp; member dashboards</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="adm-bform-featured" />
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeAdminBookModal()">Cancel</button>
+        <button type="submit" class="btn btn-gold"><i data-lucide="save"></i> Save Book</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     UNIVERSAL DELETE CONFIRMATION MODAL
+     ═══════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="adm-delete-modal" role="dialog" aria-modal="true">
+  <div class="modal-box" style="max-width:420px;">
+    <div class="modal-header" style="border-color:rgba(201,64,64,0.15);">
+      <div class="modal-title" style="color:var(--error);">⚠️ Confirm Deletion</div>
+      <button class="modal-close" onclick="cancelAdminDelete()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.65;">
+        You are about to permanently delete the
+        <strong id="adm-delete-type-label" style="color:var(--brown-dark);">item</strong>
+        <strong id="adm-delete-target-name" style="color:var(--brown-dark);"></strong>.
+        This action <strong>cannot be undone.</strong>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="cancelAdminDelete()">Cancel</button>
+      <button class="btn btn-danger"  onclick="executeAdminDelete()"><i data-lucide="trash2"></i> Delete Permanently</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCRIPTS
+     ═══════════════════════════════════════════════════ -->
+<script src="js/auth.js"></script>
+<script src="js/book-editor.js"></script>
+<script src="js/admin.js"></script>
+
+<script>
+  /* ── Auth guard ── */
+  (function() {
+    const s = JSON.parse(localStorage.getItem('liverary_session') || 'null');
+    if (!s || s.role !== 'admin') window.location.href = 'login.html';
+  })();
+
+  /* ── Logout ── */
+  function handleAdminLogout() {
+    localStorage.removeItem('liverary_session');
+    window.location.href = 'login.html';
+  }
+
+  /* ── Topbar global search ── */
+  function handleAdminTopSearch(val) {
+    if (!val.trim()) return;
+    // Try users first
+    adminSwitch('adm-users');
+    const el = document.getElementById('users-search');
+    if (el) { el.value = val; renderUsersTable(val, 'all', 'all'); }
+  }
+
+  /* ── Populate profile quick-stats when section loads ── */
+  const _origRenderAdminProfile = window.renderAdminProfile;
+  document.addEventListener('DOMContentLoaded', () => {
+    const orig = renderAdminProfile;
+    window.renderAdminProfile = function() {
+      orig();
+      refreshAdminData();
+      const el1 = document.getElementById('adm-pstat-users');
+      const el2 = document.getElementById('adm-pstat-books');
+      const el3 = document.getElementById('adm-pstat-libs');
+      if (el1) el1.textContent = adminAccounts.length;
+      if (el2) el2.textContent = adminBooks.length;
+      if (el3) el3.textContent = adminAccounts.filter(a => a.role === 'librarian').length;
+    };
+
+    /* Fix duplicate umodal-password id — show pw-edit-row on edit, pw-row on add */
+    const origOpenUserModal = openUserModal;
+    window.openUserModal = function(uid) {
+      origOpenUserModal(uid);
+      document.getElementById('umodal-pw-row').style.display     = 'none';
+      document.getElementById('umodal-pw-edit-row').style.display = 'block';
+    };
+    const origOpenAddUserModal = openAddUserModal;
+    window.openAddUserModal = function() {
+      origOpenAddUserModal();
+      document.getElementById('umodal-pw-row').style.display     = 'block';
+      document.getElementById('umodal-pw-edit-row').style.display = 'none';
+    };
+  });
+</script>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>

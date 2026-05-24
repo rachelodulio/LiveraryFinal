@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ============================================================
+       Liverary — signup.html
+       New Account Registration Page
+       ============================================================ -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liverary | Sign Up</title>
+  <link rel="icon" type="image/png" href="images/icon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Auth Styles -->
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+
+<body>
+
+  <div class="auth-page">
+
+    <!-- ─────────────────────────────────────────────
+         LEFT DECORATIVE PANEL
+         ───────────────────────────────────────────── -->
+    <div class="auth-left">
+      <div class="auth-left-quote-deco">"</div>
+
+      <!-- Floating book tiles (decorative) -->
+      <div class="auth-books">
+        <div class="auth-book-tile abt-1"></div>
+        <div class="auth-book-tile abt-2"></div>
+        <div class="auth-book-tile abt-3"></div>
+        <div class="auth-book-tile abt-4"></div>
+      </div>
+
+      <!-- Logo -->
+      <div class="auth-left-logo">
+        <div class="auth-logo-icon">
+          <img src="images/icon.png" alt="Liverary Logo">
+        </div>
+        <span class="auth-logo-text">Liverary</span>
+      </div>
+
+      <!-- Hero copy -->
+      <div class="auth-left-hero">
+        <div class="auth-left-tag">
+          <span class="auth-left-tag-dot"></span>
+          Join 5,000+ Readers
+        </div>
+
+        <h1 class="auth-left-heading">
+          Begin your<br/>
+          <em>reading</em><br/>
+          journey today.
+        </h1>
+
+        <p class="auth-left-desc">
+          Create your free Liverary account and unlock access to thousands of
+          books, personalized shelves, and a vibrant reading community.
+        </p>
+
+        <!-- Feature pills -->
+        <div class="auth-left-pills">
+          <div class="auth-pill"><span class="auth-pill-icon">✓</span> Free forever plan</div>
+          <div class="auth-pill"><span class="auth-pill-icon">✓</span> No credit card needed</div>
+          <div class="auth-pill"><span class="auth-pill-icon">✓</span> Cancel anytime</div>
+          <div class="auth-pill"><span class="auth-pill-icon">✓</span> Instant access</div>
+        </div>
+      </div>
+
+      <!-- Mini testimonial -->
+      <div class="auth-left-bottom">
+        <div class="auth-testi-mini">
+          <p class="auth-testi-text">
+            "I signed up in under a minute and was reading my first book before
+            my coffee was even done. Liverary is absolutely brilliant."
+          </p>
+          <div class="auth-testi-author">
+            <div class="auth-testi-avatar">J</div>
+            <div>
+              <div class="auth-testi-name">John Dela Cruz</div>
+              <div class="auth-testi-role">Software Developer &amp; Avid Reader</div>
+            </div>
+            <div class="auth-testi-stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /auth-left -->
+
+
+    <!-- ─────────────────────────────────────────────
+         RIGHT FORM PANEL
+         ───────────────────────────────────────────── -->
+    <div class="auth-right">
+
+      <!-- Back to home -->
+      <a href="index.html" class="auth-back"><i data-lucide="arrow-left"></i><span>Back to Home</span></a>
+
+      <div class="auth-form-container">
+
+        <!-- Header -->
+        <div class="auth-form-header">
+          <div class="auth-tag">✦ Create Account</div>
+          <h2 class="auth-form-title">Join<br/>Liverary</h2>
+          <p class="auth-form-subtitle">
+            Fill in the form below to create your free account.
+          </p>
+        </div>
+
+        <!-- Global alert banner -->
+        <div class="auth-alert" id="signupAlert" role="alert">
+          <span class="auth-alert-icon"><i data-lucide="triangle-alert"></i></span>
+          <span class="auth-alert-msg"></span>
+        </div>
+
+        <!-- ─── SIGNUP FORM ─── -->
+        <form id="signupForm" novalidate onsubmit="handleSignup(event)">
+
+          <!-- Name row -->
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="signupFirstName">First Name</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i data-lucide="user-star"></i></span>
+                <input
+                  type="text"
+                  id="signupFirstName"
+                  class="form-input"
+                  placeholder="Juan"
+                  autocomplete="given-name"
+                  oninput="validateName('signupFirstName', 'First name')"
+                />
+              </div>
+              <div class="field-msg" id="signupFirstName-msg"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="signupLastName">Last Name</label>
+              <div class="input-wrapper">
+                <span class="input-icon"><i data-lucide="user-star"></i></span>
+                <input
+                  type="text"
+                  id="signupLastName"
+                  class="form-input"
+                  placeholder="Dela Cruz"
+                  autocomplete="family-name"
+                  oninput="validateName('signupLastName', 'Last name')"
+                />
+              </div>
+              <div class="field-msg" id="signupLastName-msg"></div>
+            </div>
+          </div><!-- /form-row-2 -->
+
+          <!-- Email -->
+          <div class="form-group">
+            <label class="form-label" for="signupEmail">Email Address</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i data-lucide="mail"></i></span>
+              <input
+                type="email"
+                id="signupEmail"
+                class="form-input"
+                placeholder="you@email.com"
+                autocomplete="email"
+                oninput="validateSignupEmail()"
+              />
+            </div>
+            <div class="field-msg hint" id="signupEmail-msg"></div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label class="form-label" for="signupPassword">Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i data-lucide="lock"></i></span>
+              <input
+                type="password"
+                id="signupPassword"
+                class="form-input"
+                placeholder="Create a strong password"
+                autocomplete="new-password"
+                oninput="onPasswordInput()"
+              />
+              <button
+                type="button"
+                class="input-toggle-pw"
+                id="signupPwToggle"
+                onclick="togglePasswordVisibility('signupPassword','signupPwToggle')"
+                aria-label="Toggle password visibility"
+              >👁️</button>
+            </div>
+
+            <!-- Strength meter -->
+            <div class="pw-strength-wrap" id="pwStrengthWrap" style="display:none;">
+              <div class="pw-strength-bars">
+                <div class="pw-bar" id="bar1"></div>
+                <div class="pw-bar" id="bar2"></div>
+                <div class="pw-bar" id="bar3"></div>
+                <div class="pw-bar" id="bar4"></div>
+              </div>
+              <span class="pw-strength-label" id="pw-strength-label"></span>
+            </div>
+
+            <div class="field-msg hint" id="signupPassword-msg">
+              Min. 8 characters with uppercase, number &amp; symbol recommended.
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="form-group">
+            <label class="form-label" for="signupConfirmPassword">Confirm Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon"><i data-lucide="lock"></i></span>
+              <input
+                type="password"
+                id="signupConfirmPassword"
+                class="form-input"
+                placeholder="Repeat your password"
+                autocomplete="new-password"
+                oninput="validateConfirmPassword()"
+              />
+              <button
+                type="button"
+                class="input-toggle-pw"
+                id="confirmPwToggle"
+                onclick="togglePasswordVisibility('signupConfirmPassword','confirmPwToggle')"
+                aria-label="Toggle password visibility"
+              >👁️</button>
+            </div>
+            <div class="field-msg" id="signupConfirmPassword-msg"></div>
+          </div>
+
+          <!-- Terms & Conditions checkbox -->
+          <div class="terms-check-wrap">
+            <div class="custom-checkbox" id="termsCheck" onclick="toggleTerms()" role="checkbox" aria-checked="false" tabindex="0"></div>
+            <p class="terms-text">
+              I agree to Liverary's
+              <a href="#" onclick="openModal('termsModal'); return false;" aria-haspopup="dialog">Terms of Service</a>
+              and
+              <a href="#" onclick="openModal('privacyModal'); return false;" aria-haspopup="dialog">Privacy Policy</a>.
+              I understand my data is stored locally for demo purposes.
+            </p>
+          </div>
+
+          <!-- Submit button -->
+          <button type="submit" class="btn-auth-submit" id="signupBtn">
+            <div class="btn-spinner"></div>
+            <span class="btn-label">Create My Account →</span>
+          </button>
+
+        </form><!-- /signupForm -->
+
+        <!-- Divider -->
+        <!-- <div class="auth-divider"><span>or sign up with</span></div> -->
+
+        <!-- Social signup (UI only — demo) -->
+        <!-- <div class="social-login-btns">
+          <button class="btn-social" onclick="showSocialToast()">
+            <span class="btn-social-icon"><img src="images/google-icon-logo-svgrepo-com.svg" alt="Google"></span> Google
+          </button>
+          <button class="btn-social" onclick="showSocialToast()">
+            <span class="btn-social-icon"><img src="images\facebook-color-svgrepo-com.svg" alt="Google"></span> Facebook
+          </button>
+        </div> -->
+
+        <!-- Switch to login -->
+        <div class="auth-switch">
+          Already have an account?
+          <a href="login.html">Sign in here →</a>
+        </div>
+
+      </div><!-- /auth-form-container -->
+    </div><!-- /auth-right -->
+
+  </div><!-- /auth-page -->
+
+  <!-- ============================================================
+       TERMS OF SERVICE MODAL
+       ============================================================ -->
+  <div class="lv-modal-overlay" id="termsModal" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle" tabindex="-1" onclick="handleOverlayClick(event, 'termsModal')">
+    <div class="lv-modal">
+      <div class="lv-modal-header">
+        <div class="lv-modal-title-wrap">
+          <span class="lv-modal-icon"><i data-lucide="file-text"></i></span>
+          <h2 class="lv-modal-title" id="termsModalTitle">Terms of Service</h2>
+        </div>
+        <button class="lv-modal-close" onclick="closeModal('termsModal')" aria-label="Close Terms of Service">✕</button>
+      </div>
+      <div class="lv-modal-body">
+        <p class="lv-modal-date">Last updated: January 1, 2025</p>
+
+        <h3>1. Acceptance of Terms</h3>
+        <p>By creating an account and using Liverary, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our platform. Liverary is a demo digital library system intended for educational and demonstration purposes.</p>
+
+        <h3>2. Account Registration</h3>
+        <p>You must provide accurate and complete information when creating your account. You are responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account. You must notify us immediately of any unauthorized use of your account.</p>
+
+        <h3>3. Use of the Platform</h3>
+        <p>Liverary grants you a limited, non-exclusive, non-transferable license to access and use the platform for personal, non-commercial purposes. You agree not to:</p>
+        <ul>
+          <li>Use the platform for any unlawful purpose or in violation of these terms</li>
+          <li>Attempt to gain unauthorized access to any part of the system</li>
+          <li>Upload or share content that infringes on intellectual property rights</li>
+          <li>Interfere with or disrupt the integrity or performance of the platform</li>
+        </ul>
+
+        <h3>4. Digital Library Content</h3>
+        <p>All books, documents, and reading materials available through Liverary are provided for demo purposes only. Content availability may change without notice. We make no warranties regarding the accuracy, completeness, or fitness for a particular purpose of any content on the platform.</p>
+
+        <h3>5. Data Storage</h3>
+        <p>For this demonstration version, all your data — including account information, reading progress, and preferences — is stored locally in your browser's localStorage. This data is not transmitted to any external server. Clearing your browser data will permanently delete your account information.</p>
+
+        <h3>6. Intellectual Property</h3>
+        <p>The Liverary name, logo, and all related marks are trademarks of Liverary. The platform's design, code, and user interface are protected by intellectual property laws. You may not copy, modify, distribute, or create derivative works without express written permission.</p>
+
+        <h3>7. Limitation of Liability</h3>
+        <p>Liverary is provided "as is" without warranties of any kind. We shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the platform, including but not limited to loss of data or reading progress.</p>
+
+        <h3>8. Changes to Terms</h3>
+        <p>We reserve the right to modify these Terms of Service at any time. Continued use of Liverary after changes are posted constitutes your acceptance of the revised terms. We will notify users of significant changes through the platform.</p>
+
+        <h3>9. Contact</h3>
+        <p>For questions about these Terms of Service, please reach out through the Liverary platform's support channels.</p>
+      </div>
+      <div class="lv-modal-footer">
+        <button class="lv-modal-btn-close" onclick="closeModal('termsModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PRIVACY POLICY MODAL
+       ============================================================ -->
+  <div class="lv-modal-overlay" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="privacyModalTitle" tabindex="-1" onclick="handleOverlayClick(event, 'privacyModal')">
+    <div class="lv-modal">
+      <div class="lv-modal-header">
+        <div class="lv-modal-title-wrap">
+          <span class="lv-modal-icon"><i data-lucide="shield-check"></i></span>
+          <h2 class="lv-modal-title" id="privacyModalTitle">Privacy Policy</h2>
+        </div>
+        <button class="lv-modal-close" onclick="closeModal('privacyModal')" aria-label="Close Privacy Policy">✕</button>
+      </div>
+      <div class="lv-modal-body">
+        <p class="lv-modal-date">Last updated: January 1, 2025</p>
+
+        <h3>1. Overview</h3>
+        <p>Liverary is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our digital library platform. Because Liverary is a demonstration system, all data handling is local to your device.</p>
+
+        <h3>2. Information We Collect</h3>
+        <p>When you register for a Liverary account, we collect:</p>
+        <ul>
+          <li><strong>Account Information:</strong> Your first and last name, and email address</li>
+          <li><strong>Authentication Data:</strong> Your password (stored locally in demo mode)</li>
+          <li><strong>Usage Data:</strong> Reading progress, book favorites, and shelf organization</li>
+          <li><strong>Preferences:</strong> Any settings or customizations you configure</li>
+        </ul>
+
+        <h3>3. How We Store Your Data</h3>
+        <p>This is a demo application. All data you provide is stored exclusively in your browser's localStorage on your own device. No information is transmitted to, or stored on, any external server or database. Your data never leaves your browser.</p>
+
+        <h3>4. How We Use Your Information</h3>
+        <p>The information stored locally is used solely to:</p>
+        <ul>
+          <li>Authenticate your account and maintain your session</li>
+          <li>Personalize your reading experience and dashboard</li>
+          <li>Save your reading progress and book preferences</li>
+          <li>Provide role-appropriate access (Member, Librarian, or Admin)</li>
+        </ul>
+
+        <h3>5. Data Sharing</h3>
+        <p>Since all data is stored locally on your device, Liverary does not share, sell, rent, or trade your personal information with any third parties. We have no access to the data stored in your browser's localStorage.</p>
+
+        <h3>6. Data Retention & Deletion</h3>
+        <p>Your data persists in localStorage until you explicitly clear it. You can delete all your Liverary data at any time by clearing your browser's site data or localStorage. Upon deletion, all account information, reading history, and preferences will be permanently removed.</p>
+
+        <h3>7. Cookies</h3>
+        <p>Liverary does not use tracking cookies. We only use browser localStorage for session management and data persistence. No third-party analytics or advertising cookies are used on this platform.</p>
+
+        <h3>8. Children's Privacy</h3>
+        <p>Liverary is not directed at children under 13 years of age. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided information to Liverary, please contact us.</p>
+
+        <h3>9. Security</h3>
+        <p>While Liverary takes reasonable steps to protect your locally stored data, please be aware that no method of local storage is 100% secure. As this is a demo application, passwords are stored in plain text in localStorage — this is not a practice used in production systems.</p>
+
+        <h3>10. Changes to This Policy</h3>
+        <p>We may update this Privacy Policy from time to time. We will notify you of any changes by updating the date at the top of this document. Your continued use of Liverary after changes are posted constitutes acceptance of the updated policy.</p>
+
+        <h3>11. Contact Us</h3>
+        <p>If you have questions or concerns about this Privacy Policy or our data practices, please contact us through the Liverary platform.</p>
+      </div>
+      <div class="lv-modal-footer">
+        <button class="lv-modal-btn-close" onclick="closeModal('privacyModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="auth-alert" id="signupToast"
+       style="position:fixed; bottom:24px; right:24px; max-width:360px; border-radius:10px;
+              box-shadow:0 8px 32px rgba(67,48,42,0.18); z-index:9999; display:none;">
+    <span class="auth-alert-icon">ℹ️</span>
+    <span class="auth-alert-msg"></span>
+  </div>
+
+  <!-- Auth Library -->
+  <script src="js/auth.js"></script>
+
+  <!-- ============================================================
+       SIGNUP PAGE SCRIPT
+       ============================================================ -->
+  <script>
+    /* ─── State ─── */
+    let termsAccepted = false;
+
+    /* ─── On page load ─── */
+    (function() {
+      // Redirect if already logged in
+      redirectIfLoggedIn();
+    })();
+
+    /* ─────────────────────────────────────
+       MODAL HANDLERS
+       ───────────────────────────────────── */
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+      modal.classList.add('open');
+      document.body.classList.add('modal-open');
+      // Move focus into modal for accessibility
+      modal.focus();
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+      modal.classList.remove('open');
+      document.body.classList.remove('modal-open');
+    }
+
+    function handleOverlayClick(event, modalId) {
+      // Only close if the click was directly on the overlay (not the modal box)
+      if (event.target === event.currentTarget) {
+        closeModal(modalId);
+      }
+    }
+
+    // Close modals on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal('termsModal');
+        closeModal('privacyModal');
+      }
+    });
+
+    /* ─────────────────────────────────────
+       TERMS TOGGLE
+       ───────────────────────────────────── */
+    function toggleTerms() {
+      termsAccepted = !termsAccepted;
+      const box = document.getElementById('termsCheck');
+      box.classList.toggle('checked', termsAccepted);
+      box.setAttribute('aria-checked', termsAccepted);
+    }
+
+    /* ─────────────────────────────────────
+       FIELD VALIDATION
+       ───────────────────────────────────── */
+
+    /** Validate a simple name field (first/last) */
+    function validateName(fieldId, label) {
+      const val = document.getElementById(fieldId).value.trim();
+      if (!val) {
+        setInputState(fieldId, '');
+        setFieldMsg(fieldId, '', '');
+        return false;
+      }
+      if (val.length < 2) {
+        setInputState(fieldId, 'error');
+        setFieldMsg(fieldId, 'error', `✗ ${label} must be at least 2 characters.`);
+        return false;
+      }
+      if (!/^[A-Za-zÀ-ÿ\s'\-]+$/.test(val)) {
+        setInputState(fieldId, 'error');
+        setFieldMsg(fieldId, 'error', `✗ ${label} contains invalid characters.`);
+        return false;
+      }
+      setInputState(fieldId, 'valid');
+      setFieldMsg(fieldId, 'success', '✓');
+      return true;
+    }
+
+    /** Validate signup email — also checks for duplicates in localStorage */
+    function validateSignupEmail() {
+      const val = document.getElementById('signupEmail').value.trim();
+      if (!val) {
+        setInputState('signupEmail', '');
+        setFieldMsg('signupEmail', '', '');
+        return false;
+      }
+      if (!isValidEmail(val)) {
+        setInputState('signupEmail', 'error');
+        setFieldMsg('signupEmail', 'error', '✗ Please enter a valid email address.');
+        return false;
+      }
+      // Check if email already in use
+      if (findAccountByEmail(val)) {
+        setInputState('signupEmail', 'error');
+        setFieldMsg('signupEmail', 'error', '✗ This email is already registered. Try logging in.');
+        return false;
+      }
+      setInputState('signupEmail', 'valid');
+      setFieldMsg('signupEmail', 'success', '✓ Email available!');
+      return true;
+    }
+
+    /** Validate password and update strength meter */
+    function onPasswordInput() {
+      const val  = document.getElementById('signupPassword').value;
+      const wrap = document.getElementById('pwStrengthWrap');
+
+      // Show strength meter only when typing
+      wrap.style.display = val.length > 0 ? 'block' : 'none';
+
+      if (val.length > 0) {
+        updateStrengthMeter(val);
+      }
+
+      // Re-validate confirm password if it has a value
+      if (document.getElementById('signupConfirmPassword').value) {
+        validateConfirmPassword();
+      }
+
+      return validateSignupPassword();
+    }
+
+    function validateSignupPassword() {
+      const val = document.getElementById('signupPassword').value;
+      if (!val) {
+        setInputState('signupPassword', '');
+        setFieldMsg('signupPassword', 'hint', 'Min. 8 characters with uppercase, number & symbol recommended.');
+        return false;
+      }
+      if (val.length < MIN_PASSWORD_LEN) {
+        setInputState('signupPassword', 'error');
+        setFieldMsg('signupPassword', 'error', `✗ Password must be at least ${MIN_PASSWORD_LEN} characters.`);
+        return false;
+      }
+      setInputState('signupPassword', 'valid');
+      setFieldMsg('signupPassword', '', '');
+      return true;
+    }
+
+    /** Validate that confirm password matches */
+    function validateConfirmPassword() {
+      const pw      = document.getElementById('signupPassword').value;
+      const confirm = document.getElementById('signupConfirmPassword').value;
+      if (!confirm) {
+        setInputState('signupConfirmPassword', '');
+        setFieldMsg('signupConfirmPassword', '', '');
+        return false;
+      }
+      if (pw !== confirm) {
+        setInputState('signupConfirmPassword', 'error');
+        setFieldMsg('signupConfirmPassword', 'error', '✗ Passwords do not match.');
+        return false;
+      }
+      setInputState('signupConfirmPassword', 'valid');
+      setFieldMsg('signupConfirmPassword', 'success', '✓ Passwords match!');
+      return true;
+    }
+
+    /* ─────────────────────────────────────
+       MAIN SIGNUP HANDLER
+       ───────────────────────────────────── */
+    function handleSignup(e) {
+      e.preventDefault();
+      hideAlert('signupAlert');
+
+      // Run all field validations
+      const firstOk   = validateName('signupFirstName', 'First name');
+      const lastOk    = validateName('signupLastName',  'Last name');
+      const emailOk   = validateSignupEmail();
+      const pwOk      = validateSignupPassword();
+      const confirmOk = validateConfirmPassword();
+
+      if (!firstOk || !lastOk || !emailOk || !pwOk || !confirmOk) {
+        showAlert('signupAlert', 'error', 'Please fix all errors above before continuing.');
+        // Scroll to top of form
+        document.getElementById('signupAlert').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return;
+      }
+
+      if (!termsAccepted) {
+        showAlert('signupAlert', 'error', '⚠️ Please accept the Terms of Service to continue.');
+        return;
+      }
+
+      // Simulate network delay
+      setBtnLoading('signupBtn', true);
+
+      setTimeout(() => {
+        const result = createAccount({
+          firstName: document.getElementById('signupFirstName').value.trim(),
+          lastName:  document.getElementById('signupLastName').value.trim(),
+          email:     document.getElementById('signupEmail').value.trim(),
+          password:  document.getElementById('signupPassword').value,
+          role:      'member',
+        });
+
+        setBtnLoading('signupBtn', false);
+
+        if (!result.ok) {
+          showAlert('signupAlert', 'error', result.error);
+          return;
+        }
+
+        // Auto-login after signup
+        saveSession(result.user);
+
+        // Show success message then redirect
+        showAlert('signupAlert', 'success',
+          `✓ Welcome to Liverary, ${result.user.firstName}! Taking you to your dashboard...`);
+
+        setTimeout(() => {
+          window.location.href = DASHBOARDS[result.user.role];
+        }, 1200);
+
+      }, 800);
+    }
+
+    /* ─────────────────────────────────────
+       HELPERS
+       ───────────────────────────────────── */
+    function showSocialToast() {
+      const toast = document.getElementById('signupToast');
+      toast.className = 'auth-alert show error';
+      toast.style.display = 'flex';
+      toast.querySelector('.auth-alert-icon').textContent = 'ℹ️';
+      toast.querySelector('.auth-alert-msg').textContent  = '🚧 Social sign-up is coming soon!';
+      setTimeout(() => { toast.style.display = 'none'; }, 3500);
+    }
+  </script>
+</style>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ============================================================
+       Liverary — member-dashboard.html
+       Member Role Dashboard
+       ============================================================ -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liverary | My Dashboard</title>
+  <link rel="icon" type="image/png" href="images/icon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Dashboard Styles -->
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+
+<body>
+
+<!-- ============================================================
+     DASHBOARD SHELL
+     ============================================================ -->
+<div class="dashboard-shell">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar navigation">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <img src="images/icon.png" alt="Liverary Logo">
+      </div>
+      <span class="sidebar-logo-text">Liverary</span>
+    </div>
+
+    <!-- User info -->
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" data-user-avatar>U</div>
+      <div>
+        <div class="sidebar-user-name" data-user-name>Loading...</div>
+        <div class="sidebar-user-role">Member</div>
+      </div>
+      <div class="sidebar-role-badge">Member</div>
+    </div>
+
+    <!-- Main nav -->
+    <div class="sidebar-section-label">Main Menu</div>
+    <ul class="sidebar-nav">
+      <li>
+        <a href="#" data-section="home" onclick="switchSection('home'); return false;" class="active">
+          <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span> Dashboard
+        </a>
+      </li>
+      <li>
+        <a href="#" data-section="explore" onclick="switchSection('explore'); return false;">
+          <span class="nav-icon"><i data-lucide="search"></i></span> Explore Books
+        </a>
+      </li>
+      <li>
+        <a href="#" data-section="favorites" onclick="switchSection('favorites'); return false;">
+          <span class="nav-icon"><i data-lucide="heart"></i></span> My Favorites
+        </a>
+      </li>
+      <li>
+        <a href="#" data-section="reading" onclick="switchSection('reading'); return false;">
+          <span class="nav-icon"><i data-lucide="book-open-text"></i></span> Reading Progress
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-section-label">Account</div>
+    <ul class="sidebar-nav">
+      <li>
+        <a href="#" data-section="profile" onclick="switchSection('profile'); return false;">
+          <span class="nav-icon"><i data-lucide="user-round"></i></span> My Profile
+        </a>
+      </li>
+      <li>
+        <a href="#" data-section="settings" onclick="switchSection('settings'); return false;">
+          <span class="nav-icon"><i data-lucide="settings"></i></span> Settings
+        </a>
+      </li>
+    </ul>
+
+    <!-- Logout -->
+    <div class="sidebar-bottom">
+      <button class="btn-sidebar-logout" onclick="handleLogout()">
+        <span class="nav-icon"><i data-lucide="log-out"></i></span> Logout
+      </button>
+    </div>
+
+  </aside><!-- /sidebar -->
+
+  <!-- Sidebar overlay (mobile tap-to-close) -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeMobileSidebar()"></div>
+
+  <!-- ─── MAIN CONTENT ─── -->
+  <main class="dashboard-main">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-menu-btn" onclick="openMobileSidebar()" aria-label="Open menu">☰</button>
+        <div>
+          <div class="topbar-title"    id="topbar-title">My Dashboard</div>
+          <div class="topbar-subtitle" id="topbar-subtitle">Welcome back 👋</div>
+        </div>
+      </div>
+
+      <!-- Search bar -->
+      <div class="topbar-search" id="topbar-search-bar">
+        <span class="topbar-search-icon"><i data-lucide="search"></i></span>
+        <input
+          type="text"
+          placeholder="Search books, authors…"
+          id="topbar-search-input"
+          onkeyup="handleTopbarSearch(this.value)"
+          aria-label="Search books"
+        />
+      </div>
+
+      <div class="topbar-right">
+        <!-- Notifications -->
+        <button class="topbar-icon-btn" aria-label="Notifications"
+                onclick="showToast('You have no new notifications.', '')">
+          <i data-lucide="bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+
+        <!-- Profile chip -->
+        <div class="topbar-profile" onclick="switchSection('profile')">
+          <div class="topbar-avatar" data-user-avatar>U</div>
+          <div class="topbar-user-name" data-user-first>User</div>
+        </div>
+      </div>
+    </header><!-- /topbar -->
+
+    <!-- ==========================================================
+         PAGE CONTENT
+         ========================================================== -->
+    <div class="page-content">
+
+      <!-- ────────────────────────────────────────
+           SECTION: HOME / DASHBOARD OVERVIEW
+           ──────────────────────────────────────── -->
+      <section class="page-section active" id="section-home">
+
+        <!-- Welcome banner -->
+        <div style="background:linear-gradient(130deg, var(--brown-dark) 0%, #5a3d33 60%, #7a5230 100%);
+                    border-radius:var(--radius-lg); padding:28px 32px; margin-bottom:24px;
+                    display:flex; align-items:center; justify-content:space-between;
+                    overflow:hidden; position:relative;">
+          <div style="position:absolute; right:-40px; top:-40px; width:220px; height:220px;
+                      background:radial-gradient(circle, rgba(196,150,44,0.15), transparent 70%);
+                      border-radius:50%; pointer-events:none;"></div>
+          <div style="position:relative; z-index:1;">
+            <div style="font-size:0.72rem; font-weight:600; letter-spacing:0.15em;
+                        text-transform:uppercase; color:var(--gold-light); margin-bottom:8px;">
+              Welcome back
+            </div>
+            <h2 style="font-family:'Playfair Display',serif; font-size:1.7rem; color:var(--cream);
+                       font-weight:800; margin-bottom:6px;" data-user-name>Reader</h2>
+            <p style="font-size:0.88rem; color:rgba(255,250,235,0.55); max-width:360px;">
+              Your library awaits. Pick up where you left off or explore something new.
+            </p>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:6px;
+                      position:relative; z-index:1; flex-shrink:0;">
+            <div style="font-size:3rem;">📚</div>
+            <button class="btn btn-gold btn-sm" onclick="switchSection('explore')">
+              Browse Library →
+            </button>
+          </div>
+        </div>
+
+        <!-- Stat cards -->
+        <div class="stat-cards-grid">
+          <div class="stat-card">
+            <div class="stat-card-icon gold"><i data-lucide="book-copy"></i></div>
+            <div class="stat-card-value" id="stat-total-books">0</div>
+            <div class="stat-card-label">Books Available</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon brown"><i data-lucide="heart"></i></div>
+            <div class="stat-card-value" id="stat-favorites">0</div>
+            <div class="stat-card-label">My Favorites</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon olive"><i data-lucide="book-open-text"></i></div>
+            <div class="stat-card-value" id="stat-in-progress">0</div>
+            <div class="stat-card-label">In Progress</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon green"><i data-lucide="book-check"></i></div>
+            <div class="stat-card-value" id="stat-completed">0</div>
+            <div class="stat-card-label">Completed</div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:22px;">
+          <!-- Continue Reading -->
+          <div class="panel" style="grid-column: 1 / -1;">
+            <div class="panel-header">
+              <div class="panel-title"><i data-lucide="book-open-text"></i> Continue Reading</div>
+              <button class="btn btn-outline btn-sm" onclick="switchSection('reading')">View All</button>
+            </div>
+            <div class="panel-body">
+              <div class="grid-4" id="continue-reading-grid"><!-- Rendered by JS --></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- Featured Books -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">⭐ Featured Books</div>
+              <button class="btn btn-outline btn-sm" onclick="switchSection('explore')">See All</button>
+            </div>
+            <div class="panel-body">
+              <div class="grid-2" id="featured-books-grid"><!-- Rendered by JS --></div>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><i data-lucide="clock-fading"></i> Recent Activity</div>
+            </div>
+            <div class="panel-body">
+              <div id="activity-list"><!-- Rendered by JS --></div>
+            </div>
+          </div>
+        </div>
+
+      </section><!-- /section-home -->
+
+
+      <!-- ────────────────────────────────────────
+           SECTION: EXPLORE BOOKS
+           ──────────────────────────────────────── -->
+      <section class="page-section" id="section-explore">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><i data-lucide="search"></i> Explore the Library</div>
+              <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;"
+                   id="explore-count">Loading…</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="filter-bar" style="margin-bottom:22px;">
+              <div class="filter-search" style="flex:2;">
+                <span><i data-lucide="search"></i></span>
+                <input type="text" placeholder="Search title, author, category…"
+                       id="explore-search-input"
+                       oninput="renderExploreSection(this.value,
+                                  document.getElementById('explore-category-filter').value,
+                                  document.getElementById('explore-sort-filter').value)"
+                       aria-label="Search books" />
+              </div>
+              <select class="filter-select" id="explore-category-filter"
+                      onchange="renderExploreSection(
+                                  document.getElementById('explore-search-input').value,
+                                  this.value,
+                                  document.getElementById('explore-sort-filter').value)">
+                <!-- Populated by JS -->
+              </select>
+              <select class="filter-select" id="explore-sort-filter"
+                      onchange="renderExploreSection(
+                                  document.getElementById('explore-search-input').value,
+                                  document.getElementById('explore-category-filter').value,
+                                  this.value)">
+                <option value="default">Default Order</option>
+                <option value="rating">Highest Rated</option>
+                <option value="title">A–Z Title</option>
+                <option value="featured">Featured First</option>
+              </select>
+            </div>
+            <div class="grid-4" id="explore-books-grid"><!-- Rendered by JS --></div>
+          </div>
+        </div>
+      </section><!-- /section-explore -->
+
+
+      <!-- ────────────────────────────────────────
+           SECTION: FAVORITES
+           ──────────────────────────────────────── -->
+      <section class="page-section" id="section-favorites">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><i data-lucide="heart"></i> My Favorites</div>
+              <div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px;"
+                   id="fav-count">0 saved</div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="switchSection('explore')">
+              + Add More Books
+            </button>
+          </div>
+          <div class="panel-body">
+            <div class="grid-4" id="favorites-grid"><!-- Rendered by JS --></div>
+          </div>
+        </div>
+      </section><!-- /section-favorites -->
+
+
+      <!-- ────────────────────────────────────────
+           SECTION: READING PROGRESS
+           ──────────────────────────────────────── -->
+      <section class="page-section" id="section-reading">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:22px;">
+          <div class="stat-card" style="display:flex; align-items:center; gap:16px; padding:20px;">
+            <div class="stat-card-icon olive" style="margin:0; flex-shrink:0;">
+              <i data-lucide="book-open-text"></i>
+            </div>
+            <div>
+              <div class="stat-card-value" id="reading-in-progress-count">0</div>
+              <div class="stat-card-label">In Progress</div>
+            </div>
+          </div>
+          <div class="stat-card" style="display:flex; align-items:center; gap:16px; padding:20px;">
+            <div class="stat-card-icon green" style="margin:0; flex-shrink:0;">
+              <i data-lucide="book-check"></i>
+            </div>
+            <div>
+              <div class="stat-card-value" id="reading-completed-count">0</div>
+              <div class="stat-card-label">Completed</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">My Reading Journey</div>
+            <button class="btn btn-gold btn-sm" onclick="switchSection('explore')">
+              📚 Find a New Book
+            </button>
+          </div>
+          <div class="panel-body">
+            <div class="grid-4" id="reading-progress-grid"><!-- Rendered by JS --></div>
+          </div>
+        </div>
+      </section><!-- /section-reading -->
+
+      <!-- ────────────────────────────────────────
+           SECTION: MY PROFILE
+           ──────────────────────────────────────── -->
+      <section class="page-section" id="section-profile">
+        <div class="grid-2">
+
+          <!-- Profile display card -->
+          <div class="panel">
+            <div class="panel-body" style="text-align:center; padding:32px 24px;">
+              <div style="width:90px; height:90px; border-radius:50%; margin:0 auto 16px;
+                          background:linear-gradient(135deg, var(--gold), var(--brown-mid));
+                          display:flex; align-items:center; justify-content:center;
+                          font-family:'Playfair Display',serif; font-size:2rem;
+                          font-weight:700; color:white; box-shadow:var(--shadow-md);"
+                   id="profile-avatar-display">U</div>
+
+              <h3 style="font-size:1.35rem; margin-bottom:4px;" id="profile-name-display">Loading...</h3>
+              <p style="font-size:0.85rem; margin-bottom:6px;" id="profile-email-display">—</p>
+
+              <div style="display:inline-flex; align-items:center; gap:7px;
+                          background:rgba(196,150,44,0.10); border:1px solid rgba(196,150,44,0.25);
+                          border-radius:20px; padding:5px 14px; font-size:0.75rem;
+                          font-weight:600; color:var(--brown-mid); margin-bottom:20px;">
+                <i data-lucide="user-star"></i>
+                <span id="profile-role-display">Member</span>
+              </div>
+
+              <div style="display:grid; grid-template-columns:repeat(3,1fr);
+                          gap:12px; padding:18px; background:var(--cream);
+                          border-radius:var(--radius-md);">
+                <div>
+                  <div style="font-family:'Playfair Display',serif; font-size:1.4rem;
+                               font-weight:700; color:var(--brown-dark);"
+                       id="profile-books-read">0</div>
+                  <div style="font-size:0.7rem; color:var(--text-muted); font-weight:500;">Books Read</div>
+                </div>
+                <div>
+                  <div style="font-family:'Playfair Display',serif; font-size:1.4rem;
+                               font-weight:700; color:var(--brown-dark);"
+                       id="profile-fav-count">0</div>
+                  <div style="font-size:0.7rem; color:var(--text-muted); font-weight:500;">Favorites</div>
+                </div>
+                <div>
+                  <div style="font-family:'Playfair Display',serif; font-size:1.4rem;
+                               font-weight:700; color:var(--brown-dark);"
+                       id="profile-completed-count">0</div>
+                  <div style="font-size:0.7rem; color:var(--text-muted); font-weight:500;">Completed</div>
+                </div>
+              </div>
+
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-top:14px;">
+                Member since <strong id="profile-joined-display">—</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit profile form -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title"><i data-lucide="pencil"></i> Edit Profile</div>
+            </div>
+            <div class="panel-body">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                <div class="form-group">
+                  <label class="form-label-dash">First Name</label>
+                  <input type="text" class="form-input-dash" id="edit-first-name" placeholder="First name" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label-dash">Last Name</label>
+                  <input type="text" class="form-input-dash" id="edit-last-name" placeholder="Last name" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label-dash">Email Address</label>
+                <input type="email" class="form-input-dash" id="edit-email" placeholder="you@email.com" />
+              </div>
+              <div style="display:flex; gap:10px; margin-top:6px;">
+                <button class="btn btn-gold" onclick="saveProfileChanges()">
+                  <i data-lucide="save"></i>
+                  <span>Save Changes</span>
+                </button>
+                <button class="btn btn-outline" onclick="renderProfileSection()">Reset</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section><!-- /section-profile -->
+
+
+      <!-- ────────────────────────────────────────
+           SECTION: SETTINGS
+           ──────────────────────────────────────── -->
+      <section class="page-section" id="section-settings">
+        <div style="max-width:640px;">
+
+          <!-- Change password -->
+          <div class="panel" style="margin-bottom:22px;">
+            <div class="panel-header">
+              <div class="panel-title"><i data-lucide="lock"></i> Change Password</div>
+            </div>
+            <div class="panel-body">
+              <div class="form-group">
+                <label class="form-label-dash">Current Password</label>
+                <input type="password" class="form-input-dash" id="settings-current-pw"
+                       placeholder="Enter current password" />
+              </div>
+              <div class="form-group">
+                <label class="form-label-dash">New Password</label>
+                <input type="password" class="form-input-dash" id="settings-new-pw"
+                       placeholder="Min. 8 characters" />
+              </div>
+              <div class="form-group">
+                <label class="form-label-dash">Confirm New Password</label>
+                <input type="password" class="form-input-dash" id="settings-confirm-pw"
+                       placeholder="Repeat new password" />
+              </div>
+              <button class="btn btn-gold" onclick="savePasswordChange()">
+                <i data-lucide="shield-check"></i>
+                <span>Update Password</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Notifications -->
+          <div class="panel" style="margin-bottom:22px;">
+            <div class="panel-header">
+              <div class="panel-title"><i data-lucide="bell"></i> Notifications</div>
+            </div>
+            <div class="panel-body">
+              <div style="display:flex; flex-direction:column; gap:16px;" id="notif-settings">
+                <!-- Injected by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Danger zone -->
+          <div class="panel" style="border-color:rgba(201,64,64,0.25);">
+            <div class="panel-header" style="border-bottom-color:rgba(201,64,64,0.12);">
+              <div class="panel-title" style="color:var(--error);">⚠️ Danger Zone</div>
+            </div>
+            <div class="panel-body">
+              <p style="font-size:0.88rem; margin-bottom:14px;">
+                Permanently delete your Liverary account and all associated data.
+                This action <strong>cannot be undone</strong>.
+              </p>
+              <div class="form-group">
+                <label class="form-label-dash" style="color:var(--error);">
+                  Type <strong>DELETE</strong> to confirm
+                </label>
+                <input type="text" class="form-input-dash" id="delete-confirm-input" placeholder="DELETE" />
+              </div>
+              <button class="btn btn-danger" onclick="handleDeleteAccount()">
+                <i data-lucide="trash-2"></i>
+                <span>Delete My Account</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section><!-- /section-settings -->
+
+    </div><!-- /page-content -->
+  </main><!-- /dashboard-main -->
+
+</div><!-- /dashboard-shell -->
+
+
+<!-- ============================================================
+     BOOK PREVIEW MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="book-preview-modal" role="dialog" aria-modal="true" aria-label="Book preview">
+  <div class="modal-box" style="max-width:520px;">
+
+    <!-- Preview header -->
+    <div class="modal-header" style="background:var(--brown-dark); border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+      <div>
+        <div style="font-size:0.68rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+                    color:var(--gold-light); margin-bottom:4px;" id="preview-category">Category</div>
+        <div class="modal-title" style="color:var(--cream);" id="preview-title">Book Title</div>
+        <div style="font-size:0.78rem; color:rgba(255,250,235,0.5); margin-top:2px;" id="preview-author">by Author</div>
+      </div>
+      <button class="modal-close" onclick="closeBookPreview()"
+              style="background:rgba(255,255,255,0.10); color:var(--cream);">✕</button>
+    </div>
+
+    <!-- Preview body -->
+    <div style="padding:28px 30px 24px; background:var(--cream);">
+      <!-- Cover + meta -->
+      <div style="display:flex; gap:20px; align-items:flex-start; margin-bottom:22px;">
+        <div id="preview-cover-box"
+             style="width:80px; height:108px; border-radius:5px 10px 10px 5px; flex-shrink:0;
+                    box-shadow:3px 4px 14px rgba(67,48,42,0.18);"></div>
+        <div style="flex:1; min-width:0;">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+            <span style="font-size:0.88rem; color:var(--gold); font-weight:700;" id="preview-rating">★ —</span>
+            <span class="chip" id="preview-category-chip">—</span>
+          </div>
+          <div style="font-size:0.78rem; color:var(--text-muted); line-height:1.5;">
+            <span id="preview-pages">— pages</span>
+          </div>
+          <!-- Favorite button -->
+          <button id="preview-fav-btn"
+                  style="margin-top:14px; display:inline-flex; align-items:center; gap:6px;
+                         padding:6px 14px; border-radius:20px; font-size:0.78rem; font-weight:600;
+                         border:1.5px solid rgba(196,150,44,0.35); background:transparent;
+                         color:var(--brown-mid); cursor:pointer; transition:all 0.2s;"
+                  onclick="previewToggleFavorite()">
+            🤍 <span id="preview-fav-label">Add to Favorites</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div style="margin-bottom:24px;">
+        <div style="font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+                    color:var(--text-muted); margin-bottom:8px;">About this book</div>
+        <p id="preview-description"
+           style="font-size:0.92rem; line-height:1.75; color:var(--text-dark);
+                  font-family:'Georgia', serif; margin:0;"></p>
+      </div>
+
+      <!-- Action buttons -->
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button class="btn btn-outline" onclick="closeBookPreview()">Close</button>
+        <button class="btn btn-gold" onclick="openBookFromPreview()">Read →</button>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /book-preview-modal -->
+
+
+<!-- ============================================================
+     BOOK READER MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="reader-modal" role="dialog" aria-modal="true" aria-label="Book reader">
+  <div class="modal-box" style="max-width:780px; display:flex; flex-direction:column;">
+
+    <!-- Reader header -->
+    <div class="modal-header"
+         style="background:var(--brown-dark); border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
+      <div>
+        <div style="font-size:0.68rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+                    color:var(--gold-light); margin-bottom:4px;" id="reader-category">Category</div>
+        <div class="modal-title" style="color:var(--cream);" id="reader-title">Book Title</div>
+        <div style="font-size:0.78rem; color:rgba(255,250,235,0.5); margin-top:2px;"
+             id="reader-author">by Author</div>
+      </div>
+      <button class="modal-close" onclick="closeReader()"
+              style="background:rgba(255,255,255,0.10); color:var(--cream);">✕</button>
+    </div>
+
+    <!-- Reading progress bar -->
+    <div style="height:4px; background:rgba(255,255,255,0.10); flex-shrink:0;">
+      <div id="reader-progress-fill"
+           style="height:100%; background:var(--gold); border-radius:2px;
+                  transition:width 0.4s ease; width:0%;"></div>
+    </div>
+
+    <!-- Book content -->
+    <div id="reader-content"
+         style="flex:1; overflow-y:auto; padding:32px 36px; background:var(--cream);
+                font-family:'Georgia', serif; min-height:320px;">
+      <!-- Rendered by JS -->
+    </div>
+
+    <!-- Reader footer -->
+    <div style="padding:16px 24px; background:white; border-top:1px solid rgba(196,150,44,0.12);
+                display:flex; align-items:center; justify-content:space-between;
+                border-radius:0 0 var(--radius-lg) var(--radius-lg); flex-wrap:wrap; gap:10px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="btn btn-outline btn-sm" onclick="readerNavigate('prev')">← Prev Page</button>
+        <div style="display:flex; align-items:center; gap:6px; font-size:0.82rem; color:var(--text-muted);">
+          Page
+          <input type="number" id="reader-page-input" min="1" value="1"
+                 onchange="readerJumpToPage()"
+                 style="width:56px; text-align:center; padding:5px 8px;
+                        border:1.5px solid rgba(67,48,42,0.15); border-radius:6px;
+                        font-family:'Poppins',sans-serif; font-size:0.82rem; outline:none;" />
+          of <strong id="reader-total-pages">—</strong>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="readerNavigate('next')">Next Page →</button>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:0.78rem; color:var(--text-muted);" id="reader-progress-pct">0%</span>
+        <button class="btn btn-gold btn-sm" onclick="closeReader()">✓ Save &amp; Close</button>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /reader-modal -->
+
+
+<!-- ============================================================
+     TOAST CONTAINER
+     ============================================================ -->
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script src="js/auth.js"></script>
+<script src="js/member.js"></script>
+
+<script>
+  /* ── Auth guard ── */
+  (function() {
+    const session = JSON.parse(localStorage.getItem('liverary_session') || 'null');
+    if (!session || session.role !== 'member') {
+      window.location.href = 'login.html';
+    }
+  })();
+
+  /* ── Logout ── */
+  function handleLogout() {
+    if (typeof logout === 'function') {
+      logout();
+    } else {
+      localStorage.removeItem('liverary_session');
+      window.location.href = 'login.html';
+    }
+  }
+
+  /* ── Topbar search ── */
+  function handleTopbarSearch(val) {
+    if (val.trim()) {
+      switchSection('explore');
+      const searchInput = document.getElementById('explore-search-input');
+      if (searchInput) searchInput.value = val;
+      renderExploreSection(val, 'all', 'default');
+    }
+  }
+
+   /* ── Patch switchSection to handle subscription ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    const _origSwitch = switchSection;
+    window.switchSection = function(id, updateNav = true) {
+      _origSwitch(id, updateNav);
+      if (id === 'subscription') renderSubscriptionSection();
+    };
+
+    /* ── Notification toggles ── */
+    const notifSettings = document.getElementById('notif-settings');
+    const prefs = [
+      { id:'notif-new-books',    label:'New book arrivals',    sub:'Get notified when new books are added', default:true  },
+      { id:'notif-featured',     label:'Featured picks',       sub:'Weekly curated recommendations',        default:true  },
+      { id:'notif-reading',      label:'Reading reminders',    sub:'Daily reading streak reminders',        default:false },
+      { id:'notif-announcements',label:'System announcements', sub:'Important updates from Liverary',       default:true  },
+    ];
+
+    notifSettings.innerHTML = prefs.map(p => {
+      const stored  = localStorage.getItem('pref_' + p.id);
+      const checked = stored !== null ? stored === 'true' : p.default;
+      return `
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <div>
+            <div style="font-size:0.85rem; font-weight:600; color:var(--brown-dark);">${p.label}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">${p.sub}</div>
+          </div>
+          <label style="position:relative; display:inline-block; width:44px; height:24px; flex-shrink:0; cursor:pointer;">
+            <input type="checkbox" ${checked ? 'checked' : ''} onchange="saveNotifPref('${p.id}', this.checked)"
+                   style="opacity:0; width:0; height:0;" />
+            <span style="position:absolute; inset:0; background:${checked ? 'var(--gold)' : 'rgba(67,48,42,0.15)'};
+                         border-radius:24px; transition:0.3s ease;" id="toggle-bg-${p.id}"></span>
+            <span style="position:absolute; top:3px; left:${checked ? '22px' : '3px'}; width:18px; height:18px;
+                         background:white; border-radius:50%; transition:0.3s ease; box-shadow:0 1px 4px rgba(0,0,0,0.2);"
+                  id="toggle-dot-${p.id}"></span>
+          </label>
+        </div>`;
+    }).join('<div style="height:1px; background:rgba(67,48,42,0.06);"></div>');
+  });
+
+  function saveNotifPref(id, checked) {
+    localStorage.setItem('pref_' + id, checked);
+    const bg  = document.getElementById('toggle-bg-'  + id);
+    const dot = document.getElementById('toggle-dot-' + id);
+    if (bg)  bg.style.background = checked ? 'var(--gold)' : 'rgba(67,48,42,0.15)';
+    if (dot) dot.style.left = checked ? '22px' : '3px';
+    showToast(checked ? '✓ Notification enabled.' : 'Notification disabled.', checked ? 'success' : '');
+  }
+</script>
+
+<!-- Lucide icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
+
+</body>
+</html>
