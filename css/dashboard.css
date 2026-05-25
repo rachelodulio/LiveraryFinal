@@ -1311,3 +1311,247 @@ a, button { -webkit-tap-highlight-color: transparent; }
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
+/* ============================================================
+   BOOK READER MODAL — Fixed-size, stable layout
+   The modal maintains a consistent height so navigation
+   controls never shift between pages. Only the content
+   area (#reader-content) scrolls internally.
+   ============================================================ */
+
+/* Overlay: same as .modal-overlay but reader gets its own
+   padding reduction so the box has more vertical room. */
+#reader-modal.modal-overlay {
+  padding: 16px;
+}
+
+/* The reader box: fixed height, flex column, never resizes */
+.reader-modal-box {
+  background: white;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 780px;
+  /* FIXED height — this is the core fix.
+     Using height + max-height together: on very small screens
+     the box shrinks to viewport height, but on normal screens
+     it sits at a comfortable fixed 88vh so pages never cause
+     the modal to grow or shrink. */
+  height: 88vh;
+  max-height: 88vh;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* children must NOT overflow the box */
+  animation: modalIn 0.3s cubic-bezier(0.4,0,0.2,1) both;
+  /* Prevent the box itself from scrolling — only reader-content scrolls */
+  position: relative;
+}
+
+/* Reader header — fixed, never scrolls */
+.reader-header {
+  background: var(--brown-dark);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  flex-shrink: 0; /* CRITICAL: prevents header from squishing */
+  border-bottom: none;
+}
+
+/* Close button styling inside dark header */
+.reader-close-btn {
+  background: rgba(255,255,255,0.10) !important;
+  color: var(--cream) !important;
+  flex-shrink: 0;
+}
+.reader-close-btn:hover {
+  background: rgba(201,64,64,0.40) !important;
+}
+
+/* Progress track — hairline, fixed below header */
+.reader-progress-track {
+  height: 4px;
+  background: rgba(0,0,0,0.15);
+  flex-shrink: 0;
+}
+
+.reader-progress-fill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 0 2px 2px 0;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* Content area — the ONLY scrolling element.
+   flex:1 means it fills all remaining vertical space
+   between the fixed header and fixed footer. */
+.reader-content-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 32px 36px;
+  background: var(--cream);
+  font-family: 'Georgia', serif;
+  /* No min-height — the flex layout handles sizing.
+     min-height here was the original cause of modal resizing. */
+  scroll-behavior: smooth;
+}
+
+/* Reader footer — fixed, never scrolls or shifts */
+.reader-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  background: white;
+  border-top: 1px solid rgba(196,150,44,0.12);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  flex-shrink: 0; /* CRITICAL: footer never squishes */
+  gap: 10px;
+  flex-wrap: nowrap; /* keep on one line by default */
+}
+
+.reader-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.reader-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.reader-nav-arrow {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.reader-page-counter {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.reader-page-label {
+  white-space: nowrap;
+}
+
+.reader-page-input {
+  width: 52px;
+  text-align: center;
+  padding: 5px 6px;
+  border: 1.5px solid rgba(67,48,42,0.15);
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.reader-page-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(196,150,44,0.12);
+}
+
+.reader-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.reader-pct-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  min-width: 32px;
+  text-align: right;
+}
+
+/* Keyboard hint badge — shown in footer when reader opens */
+.reader-kbd-hint {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.7;
+}
+
+.reader-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  border: 1px solid rgba(67,48,42,0.18);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.7rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: var(--brown-dark);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+}
+
+/* ── Reader responsive ── */
+@media (max-width: 640px) {
+  #reader-modal.modal-overlay {
+    padding: 0; /* edge-to-edge on mobile */
+    align-items: flex-end;
+  }
+
+  .reader-modal-box {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    height: 92vh;
+    max-height: 92vh;
+    min-height: 0;
+  }
+
+  .reader-header {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: 14px 16px 12px;
+  }
+
+  .reader-content-area {
+    padding: 20px 18px;
+  }
+
+  .reader-footer {
+    padding: 10px 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .reader-nav-left {
+    gap: 6px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .reader-footer-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .reader-nav-label {
+    display: none; /* icon-only nav on mobile */
+  }
+
+  .reader-nav-arrow {
+    font-size: 1.1rem;
+  }
+
+  .reader-kbd-hint {
+    display: none; /* no keyboard hint on mobile */
+  }
+}
+
+@media (max-width: 400px) {
+  .reader-page-counter { gap: 3px; }
+  .reader-page-input { width: 44px; }
+}

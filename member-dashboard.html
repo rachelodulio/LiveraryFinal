@@ -584,55 +584,67 @@
      BOOK READER MODAL
      ============================================================ -->
 <div class="modal-overlay" id="reader-modal" role="dialog" aria-modal="true" aria-label="Book reader">
-  <div class="modal-box" style="max-width:780px; display:flex; flex-direction:column;">
+  <!--
+    FIXED-SIZE READER MODAL
+    The modal box uses a fixed height (88vh) with an internal flex column layout.
+    Only #reader-content scrolls — the header, progress bar, and footer are fixed
+    in place so navigation controls never shift position between pages.
+    Keyboard navigation: ← / → arrow keys (attached in member.js).
+  -->
+  <div class="reader-modal-box">
 
-    <!-- Reader header -->
-    <div class="modal-header"
-         style="background:var(--brown-dark); border-radius:var(--radius-lg) var(--radius-lg) 0 0;">
-      <div>
+    <!-- Reader header (fixed, never moves) -->
+    <div class="modal-header reader-header">
+      <div style="min-width:0; flex:1;">
         <div style="font-size:0.68rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
                     color:var(--gold-light); margin-bottom:4px;" id="reader-category">Category</div>
-        <div class="modal-title" style="color:var(--cream);" id="reader-title">Book Title</div>
+        <div class="modal-title" style="color:var(--cream); white-space:nowrap; overflow:hidden;
+             text-overflow:ellipsis;" id="reader-title">Book Title</div>
         <div style="font-size:0.78rem; color:rgba(255,250,235,0.5); margin-top:2px;"
              id="reader-author">by Author</div>
       </div>
-      <button class="modal-close" onclick="closeReader()"
-              style="background:rgba(255,255,255,0.10); color:var(--cream);">✕</button>
+      <button class="modal-close reader-close-btn" onclick="closeReader()"
+              aria-label="Close reader">✕</button>
     </div>
 
-    <!-- Reading progress bar -->
-    <div style="height:4px; background:rgba(255,255,255,0.10); flex-shrink:0;">
-      <div id="reader-progress-fill"
-           style="height:100%; background:var(--gold); border-radius:2px;
-                  transition:width 0.4s ease; width:0%;"></div>
+    <!-- Reading progress bar (fixed, hairline) -->
+    <div class="reader-progress-track">
+      <div id="reader-progress-fill" class="reader-progress-fill"></div>
     </div>
 
-    <!-- Book content -->
-    <div id="reader-content"
-         style="flex:1; overflow-y:auto; padding:32px 36px; background:var(--cream);
-                font-family:'Georgia', serif; min-height:320px;">
+    <!-- Book content (only this area scrolls) -->
+    <div id="reader-content" class="reader-content-area">
       <!-- Rendered by JS -->
     </div>
 
-    <!-- Reader footer -->
-    <div style="padding:16px 24px; background:white; border-top:1px solid rgba(196,150,44,0.12);
-                display:flex; align-items:center; justify-content:space-between;
-                border-radius:0 0 var(--radius-lg) var(--radius-lg); flex-wrap:wrap; gap:10px;">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <button class="btn btn-outline btn-sm" onclick="readerNavigate('prev')">← Prev Page</button>
-        <div style="display:flex; align-items:center; gap:6px; font-size:0.82rem; color:var(--text-muted);">
-          Page
+    <!-- Reader footer / navigation (fixed, never moves) -->
+    <div class="reader-footer">
+      <div class="reader-nav-left">
+        <button class="btn btn-outline btn-sm reader-nav-btn"
+                id="reader-prev-btn"
+                onclick="readerNavigate('prev')"
+                aria-label="Previous page">
+          <span class="reader-nav-arrow">←</span>
+          <span class="reader-nav-label">Prev</span>
+        </button>
+        <div class="reader-page-counter">
+          <span class="reader-page-label">Page</span>
           <input type="number" id="reader-page-input" min="1" value="1"
                  onchange="readerJumpToPage()"
-                 style="width:56px; text-align:center; padding:5px 8px;
-                        border:1.5px solid rgba(67,48,42,0.15); border-radius:6px;
-                        font-family:'Poppins',sans-serif; font-size:0.82rem; outline:none;" />
-          of <strong id="reader-total-pages">—</strong>
+                 aria-label="Jump to page"
+                 class="reader-page-input" />
+          <span class="reader-page-label">of <strong id="reader-total-pages">—</strong></span>
         </div>
-        <button class="btn btn-outline btn-sm" onclick="readerNavigate('next')">Next Page →</button>
+        <button class="btn btn-outline btn-sm reader-nav-btn"
+                id="reader-next-btn"
+                onclick="readerNavigate('next')"
+                aria-label="Next page">
+          <span class="reader-nav-label">Next</span>
+          <span class="reader-nav-arrow">→</span>
+        </button>
       </div>
-      <div style="display:flex; align-items:center; gap:10px;">
-        <span style="font-size:0.78rem; color:var(--text-muted);" id="reader-progress-pct">0%</span>
+      <div class="reader-footer-right">
+        <span class="reader-pct-label" id="reader-progress-pct">0%</span>
         <button class="btn btn-gold btn-sm" onclick="closeReader()">✓ Save &amp; Close</button>
       </div>
     </div>

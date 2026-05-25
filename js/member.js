@@ -548,6 +548,9 @@ function openBookReader(bookId) {
 
   document.getElementById('reader-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  /* Attach keyboard navigation (once per open) */
+  _readerAttachKeyboard();
 }
 
 function _renderReaderSection() {
@@ -625,6 +628,10 @@ function _renderReaderSection() {
           : '✓ End of book'}</span>
       </div>
     </div>`;
+
+  /* Scroll content area back to top on every page change */
+  const contentEl = document.getElementById('reader-content');
+  if (contentEl) contentEl.scrollTop = 0;
 }
 
 /* Jump to chapter by its position in the TOC list */
@@ -673,12 +680,64 @@ function readerJumpToPage() {
   _syncReaderControls();
 }
 
+/* ─────────────────────────────────────────────────────────────
+   KEYBOARD NAVIGATION — ← / → arrow keys while reader is open
+   ───────────────────────────────────────────────────────────── */
+let _readerKeyHandler = null;
+
+function _readerAttachKeyboard() {
+  /* Remove any previous handler to avoid duplicates */
+  _readerDetachKeyboard();
+
+  _readerKeyHandler = function(e) {
+    /* Only fire when the reader modal is open */
+    if (!document.getElementById('reader-modal').classList.contains('open')) return;
+
+    /* Don't steal keys when user is typing in an input/textarea */
+    const tag = (e.target || document.activeElement || {}).tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      readerNavigate('next');
+      /* Brief visual flash on the Next button for feedback */
+      _readerButtonFlash('reader-next-btn');
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      readerNavigate('prev');
+      _readerButtonFlash('reader-prev-btn');
+    } else if (e.key === 'Escape') {
+      closeReader();
+    }
+  };
+
+  document.addEventListener('keydown', _readerKeyHandler);
+}
+
+function _readerDetachKeyboard() {
+  if (_readerKeyHandler) {
+    document.removeEventListener('keydown', _readerKeyHandler);
+    _readerKeyHandler = null;
+  }
+}
+
+/* Brief highlight pulse on a nav button for keyboard feedback */
+function _readerButtonFlash(btnId) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.style.transition = 'background 0.05s';
+  btn.style.background = 'rgba(196,150,44,0.20)';
+  setTimeout(() => { btn.style.background = ''; }, 160);
+}
+
 function closeReader() {
   document.getElementById('reader-modal').classList.remove('open');
   document.body.style.overflow = '';
   currentReadBook = null;
   _readerSections = [];
   _readerSectionIdx = 0;
+  /* Detach keyboard listener when reader closes */
+  _readerDetachKeyboard();
   const active = document.querySelector('.page-section.active');
   if (active) {
     const id = active.id.replace('section-', '');
