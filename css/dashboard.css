@@ -39,7 +39,7 @@ body {
   background: #f7f0de;
   color: var(--text-dark);
   min-height: 100vh;
-  overflow-x: hidden;
+  /* overflow-x: hidden removed — it blocks .table-scroll touch-scroll on iOS/Safari */
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -530,7 +530,11 @@ p { color: var(--text-muted); line-height: 1.7; }
   background: white;
   border-radius: var(--radius-md);
   border: 1px solid rgba(196,150,44,0.10);
-  overflow: hidden;
+  /* NOTE: overflow must NOT be 'hidden' here — it would clip the .table-scroll
+     container inside, blocking horizontal swipe/scroll on mobile.
+     Border-radius is preserved via the panel's own border; child .table-scroll
+     uses its own border-radius where needed. */
+  overflow: visible;
   margin-bottom: 22px;
 }
 
@@ -1055,8 +1059,12 @@ p { color: var(--text-muted); line-height: 1.7; }
    DASHBOARD — Extended Mobile & Tablet Fixes
    ============================================================ */
 
-/* ── Prevent overflow ── */
-html, body { max-width: 100%; overflow-x: hidden; }
+/* ── Prevent viewport-level overflow (but allow inner scroll containers) ── */
+/* NOTE: 'overflow-x: hidden' on html+body can suppress touch-scroll on inner
+   overflow:auto containers in Safari/iOS. Use 'clip' on html only and leave
+   body un-clamped so .table-scroll can scroll freely. */
+html { overflow-x: clip; }
+body { /* overflow-x intentionally NOT set here — see .table-scroll */ }
 
 /* ── Tap targets ── */
 a, button { -webkit-tap-highlight-color: transparent; }
@@ -1064,7 +1072,13 @@ a, button { -webkit-tap-highlight-color: transparent; }
 /* ── Tables: always scrollable horizontally ── */
 .table-scroll {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch; /* smooth momentum scroll on iOS */
+  width: 100%;
+  /* Ensure the scroll container itself can grow to show content */
+  display: block;
+  /* Prevent parent from clipping this scroll container */
+  position: relative;
 }
 
 /* ── Filter bar: wrap nicely ── */
@@ -1181,15 +1195,12 @@ a, button { -webkit-tap-highlight-color: transparent; }
 }
 
 /* ── Issue 1: Manage Books Table — robust horizontal scroll ── */
-.table-scroll {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  width: 100%;
-}
+/* (primary .table-scroll rules are defined above in the Extended Mobile section) */
 
 .adm-table,
 .books-table {
-  min-width: 640px; /* force scroll before columns squish */
+  min-width: 700px; /* force scroll before columns squish */
+  width: 100%;
 }
 
 @media (max-width: 640px) {

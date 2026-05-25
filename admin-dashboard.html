@@ -45,6 +45,7 @@
     /* ── Tables ── */
     .adm-table {
       width: 100%;
+      min-width: 700px; /* ensures horizontal scroll triggers on mobile */
       border-collapse: collapse;
       font-size: 0.84rem;
     }
@@ -67,7 +68,17 @@
     }
     .table-row:last-child td { border-bottom: none; }
     .table-row:hover td { background: rgba(196,150,44,0.03); }
-    .table-scroll { overflow-x: auto; }
+    /* Critical: panel must not have overflow:hidden or it clips the scroll container.
+       This overrides dashboard.css to ensure table-scroll works on mobile. */
+    .panel { overflow: visible; }
+    .table-scroll {
+      overflow-x: auto;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      display: block;
+      position: relative;
+    }
 
     /* ── Cover swatches (book modal) ── */
     .cover-swatches { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }

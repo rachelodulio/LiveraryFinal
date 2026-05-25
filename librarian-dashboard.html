@@ -1,908 +1,1444 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <!-- ============================================================
+  <head>
+    <!-- ============================================================
        Liverary — librarian-dashboard.html
        Librarian Role Dashboard
        Features: Upload Books · Edit · Delete · Categories · Feature
        ============================================================ -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Liverary | Librarian Dashboard</title>
-  <link rel="icon" type="image/png" href="images/icon.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liverary | Librarian Dashboard</title>
+    <link rel="icon" type="image/png" href="images/icon.png" />
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Dashboard Shared Styles -->
-  <link rel="stylesheet" href="css/dashboard.css" />
+    <!-- Dashboard Shared Styles -->
+    <link rel="stylesheet" href="css/dashboard.css" />
 
-  <!-- ── Librarian-specific extra styles ── -->
-  <style>
-    /* Book table */
-    .books-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-    }
-    .books-table thead th {
-      padding: 11px 14px;
-      text-align: left;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      background: var(--cream);
-      border-bottom: 1px solid rgba(196,150,44,0.12);
-      white-space: nowrap;
-    }
-    .books-table thead th:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
-    .books-table thead th:last-child  { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
-    .table-row td {
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(67,48,42,0.05);
-      vertical-align: middle;
-    }
-    .table-row:last-child td { border-bottom: none; }
-    .table-row:hover td { background: rgba(196,150,44,0.04); }
-    .book-cover-thumb {
-      display: inline-block;
-    }
-
-    /* Cover colour swatches */
-    .cover-swatches {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 6px;
-    }
-    .cover-swatch {
-      width: 36px;
-      height: 48px;
-      border-radius: 4px 8px 8px 4px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: var(--transition);
-      position: relative;
-    }
-    .cover-swatch:hover   { transform: scale(1.08); }
-    .cover-swatch.selected {
-      border-color: white;
-      box-shadow: 0 0 0 3px var(--gold);
-      transform: scale(1.12);
-    }
-    .cover-swatch.selected::after {
-      content: '✓';
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 0.85rem;
-      font-weight: 700;
-      background: rgba(0,0,0,0.25);
-      border-radius: 2px 6px 6px 2px;
-    }
-
-    /* Cover live preview */
-    .cover-preview-box {
-      width: 72px;
-      height: 96px;
-      border-radius: 5px 12px 12px 5px;
-      box-shadow: var(--shadow-md);
-      transition: var(--transition);
-      flex-shrink: 0;
-    }
-
-    /* Category manage cards */
-    .cat-manage-card {
-      background: white;
-      border: 1px solid rgba(196,150,44,0.12);
-      border-radius: var(--radius-md);
-      padding: 16px 18px;
-      transition: var(--transition);
-    }
-    .cat-manage-card:hover {
-      border-color: rgba(196,150,44,0.28);
-      box-shadow: var(--shadow-sm);
-    }
-
-    /* Rating range input */
-    input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 5px;
-      border-radius: 3px;
-      background: rgba(67,48,42,0.12);
-      outline: none;
-      cursor: pointer;
-    }
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--gold);
-      box-shadow: 0 2px 6px rgba(196,150,44,0.35);
-    }
-
-    /* Toggle switch */
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 46px;
-      height: 25px;
-      cursor: pointer;
-    }
-    .toggle-switch input { opacity: 0; width: 0; height: 0; }
-    .toggle-track {
-      position: absolute;
-      inset: 0;
-      border-radius: 25px;
-      background: rgba(67,48,42,0.15);
-      transition: var(--transition);
-    }
-    .toggle-switch input:checked + .toggle-track { background: var(--gold); }
-    .toggle-thumb {
-      position: absolute;
-      top: 3px; left: 3px;
-      width: 19px; height: 19px;
-      border-radius: 50%;
-      background: white;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
-      transition: var(--transition);
-    }
-    .toggle-switch input:checked ~ .toggle-thumb { left: 24px; }
-
-    /* Scrollable table wrapper */
-    .table-scroll { overflow-x: auto; }
-
-    /* ── Categories section: grid stacks on mobile ── */
-    #section-lib-categories .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 22px;
-      align-items: start;
-    }
-    @media (max-width: 760px) {
-      #section-lib-categories .grid-2 {
-        grid-template-columns: 1fr;
+    <!-- ── Librarian-specific extra styles ── -->
+    <style>
+      /* Book table */
+      .books-table {
+        width: 100%;
+        min-width: 700px; /* ensures horizontal scroll triggers on mobile */
+        border-collapse: collapse;
+        font-size: 0.85rem;
       }
-    }
+      .books-table thead th {
+        padding: 11px 14px;
+        text-align: left;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        background: var(--cream);
+        border-bottom: 1px solid rgba(196, 150, 44, 0.12);
+        white-space: nowrap;
+      }
+      .books-table thead th:first-child {
+        border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      }
+      .books-table thead th:last-child {
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      }
+      .table-row td {
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(67, 48, 42, 0.05);
+        vertical-align: middle;
+      }
+      .table-row:last-child td {
+        border-bottom: none;
+      }
+      .table-row:hover td {
+        background: rgba(196, 150, 44, 0.04);
+      }
+      .book-cover-thumb {
+        display: inline-block;
+      }
 
-    /* ── Add Category row ── */
-    .add-cat-row {
-      display: flex;
-      gap: 10px;
-      align-items: stretch;
-    }
-    .add-cat-input {
-      flex: 1;
-      min-width: 0;
-    }
-    .add-cat-btn {
-      flex-shrink: 0;
-      white-space: nowrap;
-    }
+      /* Cover colour swatches */
+      .cover-swatches {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+      }
+      .cover-swatch {
+        width: 36px;
+        height: 48px;
+        border-radius: 4px 8px 8px 4px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: var(--transition);
+        position: relative;
+      }
+      .cover-swatch:hover {
+        transform: scale(1.08);
+      }
+      .cover-swatch.selected {
+        border-color: white;
+        box-shadow: 0 0 0 3px var(--gold);
+        transform: scale(1.12);
+      }
+      .cover-swatch.selected::after {
+        content: "✓";
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.85rem;
+        font-weight: 700;
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 2px 6px 6px 2px;
+      }
 
-    /* ── Edit/Rename Category form ── */
-    .edit-cat-form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .edit-cat-input-wrap {
-      flex: 1;
-      min-width: 0;
-      width: 100%;
-    }
-    .edit-cat-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .edit-cat-actions .btn {
-      flex: 1 1 auto;
-      justify-content: center;
-      min-width: 80px;
-    }
+      /* Cover live preview */
+      .cover-preview-box {
+        width: 72px;
+        height: 96px;
+        border-radius: 5px 12px 12px 5px;
+        box-shadow: var(--shadow-md);
+        transition: var(--transition);
+        flex-shrink: 0;
+      }
 
-    /* ── Add category row: prevent overflow on tiny screens ── */
-    @media (max-width: 480px) {
-      .panel-body > div[style*="display:flex"] {
+      /* Category manage cards */
+      .cat-manage-card {
+        background: white;
+        border: 1px solid rgba(196, 150, 44, 0.12);
+        border-radius: var(--radius-md);
+        padding: 16px 18px;
+        transition: var(--transition);
+      }
+      .cat-manage-card:hover {
+        border-color: rgba(196, 150, 44, 0.28);
+        box-shadow: var(--shadow-sm);
+      }
+
+      /* Rating range input */
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 5px;
+        border-radius: 3px;
+        background: rgba(67, 48, 42, 0.12);
+        outline: none;
+        cursor: pointer;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--gold);
+        box-shadow: 0 2px 6px rgba(196, 150, 44, 0.35);
+      }
+
+      /* Toggle switch */
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 46px;
+        height: 25px;
+        cursor: pointer;
+      }
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .toggle-track {
+        position: absolute;
+        inset: 0;
+        border-radius: 25px;
+        background: rgba(67, 48, 42, 0.15);
+        transition: var(--transition);
+      }
+      .toggle-switch input:checked + .toggle-track {
+        background: var(--gold);
+      }
+      .toggle-thumb {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
+        background: white;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+        transition: var(--transition);
+      }
+      .toggle-switch input:checked ~ .toggle-thumb {
+        left: 24px;
+      }
+
+      /* Scrollable table wrapper */
+      /* Critical: panel must not have overflow:hidden or it clips this scroll container */
+      .panel {
+        overflow: visible;
+      }
+      .table-scroll {
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        display: block;
+        position: relative;
+      }
+
+      /* ── Categories section: grid stacks on mobile ── */
+      #section-lib-categories .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+        align-items: start;
+      }
+      @media (max-width: 760px) {
+        #section-lib-categories .grid-2 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── Add Category row ── */
+      .add-cat-row {
+        display: flex;
+        gap: 10px;
+        align-items: stretch;
+      }
+      .add-cat-input {
+        flex: 1;
+        min-width: 0;
+      }
+      .add-cat-btn {
+        flex-shrink: 0;
+        white-space: nowrap;
+      }
+
+      /* ── Edit/Rename Category form ── */
+      .edit-cat-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .edit-cat-input-wrap {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+      }
+      .edit-cat-actions {
+        display: flex;
+        gap: 8px;
         flex-wrap: wrap;
       }
-    }
-
-    /* ── Manage Books table: mobile refinements ── */
-    @media (max-width: 640px) {
-      /* Tighten cell padding for more room */
-      .books-table .table-row td {
-        padding: 10px 8px;
-        font-size: 0.78rem;
-      }
-      /* Book title column: tighter max-width */
-      .books-table .table-row td:first-child > div > div:first-child {
-        font-size: 0.8rem;
-        max-width: 120px;
-      }
-      /* Hide Pages column on very small screens */
-      .books-table thead th:nth-child(4),
-      .books-table .table-row td:nth-child(4) {
-        display: none;
-      }
-      /* Action buttons: icon-only on mobile, ensure no wrap overflow */
-      .books-table .table-row td:last-child > div {
-        gap: 4px;
-        flex-wrap: nowrap;
-      }
-      .books-table .table-row td:last-child .btn-sm span {
-        display: none; /* hide text labels, keep icons */
-      }
-      .books-table .table-row td:last-child .btn-sm {
-        padding: 6px 8px;
-        min-width: 32px;
+      .edit-cat-actions .btn {
+        flex: 1 1 auto;
         justify-content: center;
+        min-width: 80px;
       }
-    }
-  </style>
-</head>
 
-<body>
-<div class="dashboard-shell">
+      /* ── Add category row: prevent overflow on tiny screens ── */
+      @media (max-width: 480px) {
+        .panel-body > div[style*="display:flex"] {
+          flex-wrap: wrap;
+        }
+      }
 
-  <!-- ═══════════════════════════════════════
+      /* ── Manage Books table: mobile refinements ── */
+      @media (max-width: 640px) {
+        /* Tighten cell padding for more room */
+        .books-table .table-row td {
+          padding: 10px 8px;
+          font-size: 0.78rem;
+        }
+        /* Book title column: tighter max-width */
+        .books-table .table-row td:first-child > div > div:first-child {
+          font-size: 0.8rem;
+          max-width: 120px;
+        }
+        /* Hide Pages column on very small screens */
+        .books-table thead th:nth-child(4),
+        .books-table .table-row td:nth-child(4) {
+          display: none;
+        }
+        /* Action buttons: icon-only on mobile, ensure no wrap overflow */
+        .books-table .table-row td:last-child > div {
+          gap: 4px;
+          flex-wrap: nowrap;
+        }
+        .books-table .table-row td:last-child .btn-sm span {
+          display: none; /* hide text labels, keep icons */
+        }
+        .books-table .table-row td:last-child .btn-sm {
+          padding: 6px 8px;
+          min-width: 32px;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="dashboard-shell">
+      <!-- ═══════════════════════════════════════
        SIDEBAR
        ═══════════════════════════════════════ -->
-  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar">
+      <aside
+        class="sidebar"
+        id="sidebar"
+        role="navigation"
+        aria-label="Sidebar"
+      >
+        <!-- Logo -->
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <img src="images/icon.png" alt="Liverary Logo" />
+          </div>
+          <span class="sidebar-logo-text">Live<span>rary</span></span>
+        </div>
 
-    <!-- Logo -->
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">
-        <img src="images/icon.png" alt="Liverary Logo">
-      </div>
-      <span class="sidebar-logo-text">Live<span>rary</span></span>
-    </div>
+        <!-- Librarian user strip -->
+        <div class="sidebar-user">
+          <div class="sidebar-avatar" data-lib-avatar>L</div>
+          <div style="min-width: 0">
+            <div class="sidebar-user-name" data-lib-name>Librarian</div>
+            <div class="sidebar-user-role">Librarian</div>
+          </div>
+          <div class="sidebar-role-badge">Lib</div>
+        </div>
 
-    <!-- Librarian user strip -->
-    <div class="sidebar-user">
-      <div class="sidebar-avatar" data-lib-avatar>L</div>
-      <div style="min-width:0;">
-        <div class="sidebar-user-name" data-lib-name>Librarian</div>
-        <div class="sidebar-user-role">Librarian</div>
-      </div>
-      <div class="sidebar-role-badge">Lib</div>
-    </div>
+        <!-- Navigation -->
+        <div class="sidebar-section-label">Library</div>
+        <ul class="sidebar-nav">
+          <li>
+            <a
+              href="#"
+              data-section="lib-home"
+              class="active"
+              onclick="
+                libSwitchSection('lib-home');
+                return false;
+              "
+            >
+              <span class="nav-icon"
+                ><i data-lucide="layout-dashboard"></i
+              ></span>
+              Overview
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              data-section="lib-books"
+              onclick="
+                libSwitchSection('lib-books');
+                return false;
+              "
+            >
+              <span class="nav-icon"><i data-lucide="book-copy"></i></span>
+              Manage Books
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              data-section="lib-categories"
+              onclick="
+                libSwitchSection('lib-categories');
+                return false;
+              "
+            >
+              <span class="nav-icon"
+                ><i data-lucide="chart-column-stacked"></i
+              ></span>
+              Categories
+            </a>
+          </li>
+        </ul>
 
-    <!-- Navigation -->
-    <div class="sidebar-section-label">Library</div>
-    <ul class="sidebar-nav">
-      <li>
-        <a href="#" data-section="lib-home" class="active"
-           onclick="libSwitchSection('lib-home'); return false;">
-          <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span> Overview
-        </a>
-      </li>
-      <li>
-        <a href="#" data-section="lib-books"
-           onclick="libSwitchSection('lib-books'); return false;">
-          <span class="nav-icon"><i data-lucide="book-copy"></i></span> Manage Books
-        </a>
-      </li>
-      <li>
-        <a href="#" data-section="lib-categories"
-           onclick="libSwitchSection('lib-categories'); return false;">
-          <span class="nav-icon"><i data-lucide="chart-column-stacked"></i></span> Categories
-        </a>
-      </li>
-    </ul>
+        <div class="sidebar-section-label">Account</div>
+        <ul class="sidebar-nav">
+          <li>
+            <a
+              href="#"
+              data-section="lib-profile"
+              onclick="
+                libSwitchSection('lib-profile');
+                return false;
+              "
+            >
+              <span class="nav-icon"><i data-lucide="user-round-pen"></i></span>
+              My Profile
+            </a>
+          </li>
+        </ul>
 
-    <div class="sidebar-section-label">Account</div>
-    <ul class="sidebar-nav">
-      <li>
-        <a href="#" data-section="lib-profile"
-           onclick="libSwitchSection('lib-profile'); return false;">
-          <span class="nav-icon"><i data-lucide="user-round-pen"></i></span> My Profile
-        </a>
-      </li>
-    </ul>
+        <!-- Logout -->
+        <div class="sidebar-bottom">
+          <button class="btn-sidebar-logout" onclick="handleLibLogout()">
+            <span class="nav-icon"><i data-lucide="log-out"></i></span> Logout
+          </button>
+        </div>
+      </aside>
 
-    <!-- Logout -->
-    <div class="sidebar-bottom">
-      <button class="btn-sidebar-logout" onclick="handleLibLogout()">
-        <span class="nav-icon"><i data-lucide="log-out"></i></span> Logout
-      </button>
-    </div>
+      <!-- Mobile overlay -->
+      <div
+        class="sidebar-overlay"
+        id="sidebar-overlay"
+        onclick="closeMobileLibSidebar()"
+      ></div>
 
-  </aside>
-
-  <!-- Mobile overlay -->
-  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeMobileLibSidebar()"></div>
-
-  <!-- ═══════════════════════════════════════
+      <!-- ═══════════════════════════════════════
        MAIN CONTENT
        ═══════════════════════════════════════ -->
-  <main class="dashboard-main">
+      <main class="dashboard-main">
+        <!-- TOP BAR -->
+        <header class="topbar">
+          <div class="topbar-left">
+            <button
+              class="topbar-menu-btn"
+              onclick="openMobileLibSidebar()"
+              aria-label="Open menu"
+            >
+              ☰
+            </button>
+            <div>
+              <div class="topbar-title" id="topbar-title">Overview</div>
+              <div class="topbar-subtitle" id="topbar-subtitle">
+                Your library at a glance
+              </div>
+            </div>
+          </div>
 
-    <!-- TOP BAR -->
-    <header class="topbar">
-      <div class="topbar-left">
-        <button class="topbar-menu-btn" onclick="openMobileLibSidebar()" aria-label="Open menu">☰</button>
-        <div>
-          <div class="topbar-title"    id="topbar-title">Overview</div>
-          <div class="topbar-subtitle" id="topbar-subtitle">Your library at a glance</div>
-        </div>
-      </div>
+          <!-- Search — jumps to manage books and filters -->
+          <div class="topbar-search">
+            <span class="topbar-search-icon"><i data-lucide="search"></i></span>
+            <input
+              type="text"
+              placeholder="Search books…"
+              id="topbar-lib-search"
+              onkeyup="handleLibTopSearch(this.value)"
+              aria-label="Search books"
+            />
+          </div>
 
-      <!-- Search — jumps to manage books and filters -->
-      <div class="topbar-search">
-        <span class="topbar-search-icon"><i data-lucide="search"></i></span>
-        <input type="text" placeholder="Search books…"
-               id="topbar-lib-search"
-               onkeyup="handleLibTopSearch(this.value)"
-               aria-label="Search books" />
-      </div>
+          <div class="topbar-right">
+            <!-- Quick upload button -->
+            <button
+              class="btn btn-gold btn-sm"
+              onclick="openAddModal()"
+              style="gap: 6px"
+            >
+              <i data-lucide="book-up"></i>Upload Book
+            </button>
 
-      <div class="topbar-right">
-        <!-- Quick upload button -->
-        <button class="btn btn-gold btn-sm" onclick="openAddModal()" style="gap:6px;">
-          <i data-lucide="book-up"></i>Upload Book
-        </button>
+            <!-- Profile chip -->
+            <div
+              class="topbar-profile"
+              onclick="libSwitchSection('lib-profile')"
+            >
+              <div class="topbar-avatar" data-lib-avatar>L</div>
+              <div class="topbar-user-name" data-lib-first>Librarian</div>
+            </div>
+          </div>
+        </header>
 
-        <!-- Profile chip -->
-        <div class="topbar-profile" onclick="libSwitchSection('lib-profile')">
-          <div class="topbar-avatar" data-lib-avatar>L</div>
-          <div class="topbar-user-name" data-lib-first>Librarian</div>
-        </div>
-      </div>
-    </header>
-
-    <!-- ═══════════════════════════════════════
+        <!-- ═══════════════════════════════════════
          PAGE CONTENT
          ═══════════════════════════════════════ -->
-    <div class="page-content">
-
-      <!-- ────────────────────────────────────────
+        <div class="page-content">
+          <!-- ────────────────────────────────────────
            SECTION: OVERVIEW / HOME
            ──────────────────────────────────────── -->
-      <section class="page-section active" id="section-lib-home">
-
-        <!-- Welcome banner -->
-        <div style="background:linear-gradient(130deg,var(--olive) 0%,#8a7820 50%,var(--gold) 100%);
-                    border-radius:var(--radius-lg); padding:26px 30px; margin-bottom:24px;
-                    display:flex; align-items:center; justify-content:space-between;
-                    position:relative; overflow:hidden;">
-          <div style="position:absolute; right:-30px; top:-30px; width:200px; height:200px;
-                      background:radial-gradient(circle,rgba(255,255,255,0.12),transparent 70%);
-                      border-radius:50%; pointer-events:none;"></div>
-          <div style="position:relative; z-index:1;">
-            <div style="font-size:0.7rem; font-weight:700; letter-spacing:0.16em;
-                        text-transform:uppercase; color:rgba(255,250,235,0.65); margin-bottom:7px;">
-              Librarian Portal
+          <section class="page-section active" id="section-lib-home">
+            <!-- Welcome banner -->
+            <div
+              style="
+                background: linear-gradient(
+                  130deg,
+                  var(--olive) 0%,
+                  #8a7820 50%,
+                  var(--gold) 100%
+                );
+                border-radius: var(--radius-lg);
+                padding: 26px 30px;
+                margin-bottom: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                position: relative;
+                overflow: hidden;
+              "
+            >
+              <div
+                style="
+                  position: absolute;
+                  right: -30px;
+                  top: -30px;
+                  width: 200px;
+                  height: 200px;
+                  background: radial-gradient(
+                    circle,
+                    rgba(255, 255, 255, 0.12),
+                    transparent 70%
+                  );
+                  border-radius: 50%;
+                  pointer-events: none;
+                "
+              ></div>
+              <div style="position: relative; z-index: 1">
+                <div
+                  style="
+                    font-size: 0.7rem;
+                    font-weight: 700;
+                    letter-spacing: 0.16em;
+                    text-transform: uppercase;
+                    color: rgba(255, 250, 235, 0.65);
+                    margin-bottom: 7px;
+                  "
+                >
+                  Librarian Portal
+                </div>
+                <h2
+                  style="
+                    font-family: &quot;Playfair Display&quot;, serif;
+                    font-size: 1.6rem;
+                    color: white;
+                    font-weight: 800;
+                    margin-bottom: 5px;
+                  "
+                  data-lib-name
+                >
+                  Librarian
+                </h2>
+                <p
+                  style="
+                    font-size: 0.86rem;
+                    color: rgba(255, 255, 255, 0.6);
+                    max-width: 340px;
+                  "
+                >
+                  Curate, upload, and manage the Liverary collection.
+                </p>
+              </div>
+              <div
+                style="
+                  position: relative;
+                  z-index: 1;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 8px;
+                  flex-shrink: 0;
+                "
+              >
+                <div style="font-size: 2.8rem">📖</div>
+                <button
+                  class="btn btn-sm"
+                  onclick="openAddModal()"
+                  style="
+                    background: rgba(255, 255, 255, 0.2);
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    color: white;
+                    border-radius: 8px;
+                    padding: 8px 16px;
+                    font-size: 0.78rem;
+                    font-weight: 600;
+                  "
+                >
+                  + Upload New Book
+                </button>
+              </div>
             </div>
-            <h2 style="font-family:'Playfair Display',serif; font-size:1.6rem;
-                       color:white; font-weight:800; margin-bottom:5px;" data-lib-name>Librarian</h2>
-            <p style="font-size:0.86rem; color:rgba(255,255,255,0.6); max-width:340px;">
-              Curate, upload, and manage the Liverary collection.
-            </p>
-          </div>
-          <div style="position:relative; z-index:1; display:flex; flex-direction:column;
-                      align-items:center; gap:8px; flex-shrink:0;">
-            <div style="font-size:2.8rem;">📖</div>
-            <button class="btn btn-sm"
-                    onclick="openAddModal()"
-                    style="background:rgba(255,255,255,0.20); border:1px solid rgba(255,255,255,0.30);
-                           color:white; border-radius:8px; padding:8px 16px; font-size:0.78rem; font-weight:600;">
-              + Upload New Book
-            </button>
-          </div>
-        </div>
 
-        <!-- Stat cards -->
-        <div class="stat-cards-grid">
-          <div class="stat-card">
-            <div class="stat-card-icon gold"><i data-lucide="book-copy"></i></div>
-            <div class="stat-card-value" id="lib-stat-total">0</div>
-            <div class="stat-card-label">Total Books</div>
-            <div class="stat-card-change new">Library</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-icon olive"><i data-lucide="book-up"></i></div>
-            <div class="stat-card-value" id="lib-stat-mine">0</div>
-            <div class="stat-card-label">Uploaded by Me</div>
-            <div class="stat-card-change up">Mine</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-icon brown"><i data-lucide="star"></i></div>
-            <div class="stat-card-value" id="lib-stat-featured">0</div>
-            <div class="stat-card-label">Featured Books</div>
-            <div class="stat-card-change new">Active</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-icon green"><i data-lucide="eye"></i></div>
-            <div class="stat-card-value" id="lib-stat-views">0</div>
-            <div class="stat-card-label">Total Views</div>
-            <div class="stat-card-change up">All time</div>
-          </div>
-        </div>
-
-        <!-- Two-column lower section -->
-        <div class="grid-2">
-
-          <!-- Recent uploads -->
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">📥 Recent Uploads</div>
-              <button class="btn btn-outline btn-sm"
-                      onclick="libSwitchSection('lib-books')">View All</button>
+            <!-- Stat cards -->
+            <div class="stat-cards-grid">
+              <div class="stat-card">
+                <div class="stat-card-icon gold">
+                  <i data-lucide="book-copy"></i>
+                </div>
+                <div class="stat-card-value" id="lib-stat-total">0</div>
+                <div class="stat-card-label">Total Books</div>
+                <div class="stat-card-change new">Library</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-icon olive">
+                  <i data-lucide="book-up"></i>
+                </div>
+                <div class="stat-card-value" id="lib-stat-mine">0</div>
+                <div class="stat-card-label">Uploaded by Me</div>
+                <div class="stat-card-change up">Mine</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-icon brown">
+                  <i data-lucide="star"></i>
+                </div>
+                <div class="stat-card-value" id="lib-stat-featured">0</div>
+                <div class="stat-card-label">Featured Books</div>
+                <div class="stat-card-change new">Active</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-icon green">
+                  <i data-lucide="eye"></i>
+                </div>
+                <div class="stat-card-value" id="lib-stat-views">0</div>
+                <div class="stat-card-label">Total Views</div>
+                <div class="stat-card-change up">All time</div>
+              </div>
             </div>
-            <div class="panel-body" id="lib-recent-grid">
-              <!-- Rendered by JS -->
+
+            <!-- Two-column lower section -->
+            <div class="grid-2">
+              <!-- Recent uploads -->
+              <div class="panel">
+                <div class="panel-header">
+                  <div class="panel-title">📥 Recent Uploads</div>
+                  <button
+                    class="btn btn-outline btn-sm"
+                    onclick="libSwitchSection('lib-books')"
+                  >
+                    View All
+                  </button>
+                </div>
+                <div class="panel-body" id="lib-recent-grid">
+                  <!-- Rendered by JS -->
+                </div>
+              </div>
+
+              <!-- Category breakdown -->
+              <div class="panel">
+                <div class="panel-header">
+                  <div class="panel-title">
+                    <i data-lucide="chart-column-stacked"></i>Books by Category
+                  </div>
+                  <button
+                    class="btn btn-outline btn-sm"
+                    onclick="libSwitchSection('lib-categories')"
+                  >
+                    Manage
+                  </button>
+                </div>
+                <div class="panel-body" id="category-breakdown">
+                  <!-- Rendered by JS -->
+                </div>
+              </div>
+
+              <!-- Top viewed -->
+              <div class="panel" style="grid-column: 1/-1">
+                <div class="panel-header">
+                  <div class="panel-title">
+                    <i data-lucide="flame"></i>Most Viewed Books
+                  </div>
+                </div>
+                <div class="panel-body" id="top-viewed-list">
+                  <!-- Rendered by JS -->
+                </div>
+              </div>
             </div>
-          </div>
+          </section>
+          <!-- /section-lib-home -->
 
-          <!-- Category breakdown -->
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title"><i data-lucide="chart-column-stacked"></i>Books by Category</div>
-              <button class="btn btn-outline btn-sm"
-                      onclick="libSwitchSection('lib-categories')">Manage</button>
-            </div>
-            <div class="panel-body" id="category-breakdown">
-              <!-- Rendered by JS -->
-            </div>
-          </div>
-
-          <!-- Top viewed -->
-          <div class="panel" style="grid-column:1/-1;">
-            <div class="panel-header">
-              <div class="panel-title"><i data-lucide="flame"></i>Most Viewed Books</div>
-            </div>
-            <div class="panel-body" id="top-viewed-list">
-              <!-- Rendered by JS -->
-            </div>
-          </div>
-
-        </div>
-
-      </section><!-- /section-lib-home -->
-
-
-      <!-- ────────────────────────────────────────
+          <!-- ────────────────────────────────────────
            SECTION: MANAGE BOOKS
            ──────────────────────────────────────── -->
-      <section class="page-section" id="section-lib-books">
-
-        <div class="panel">
-          <div class="panel-header">
-            <div>
-              <div class="panel-title">📚 Book Collection</div>
-              <div id="manage-books-count"
-                   style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Loading…</div>
-            </div>
-            <button class="btn btn-gold" onclick="openAddModal()">
-              <i data-lucide="book-up"></i>Upload New Book
-            </button>
-          </div>
-
-          <!-- Filter bar -->
-          <div class="panel-body" style="padding-bottom:0; border-bottom:1px solid rgba(196,150,44,0.08);">
-            <div class="filter-bar">
-              <div class="filter-search" style="flex:2;">
-                <span><i data-lucide="search"></i></span>
-                <input type="text" id="manage-search"
-                       placeholder="Search title, author, category…"
-                       oninput="renderManageBooks(this.value,
-                                  document.getElementById('manage-cat-filter').value,
-                                  document.getElementById('manage-status-filter').value)"
-                       aria-label="Search books" />
+          <section class="page-section" id="section-lib-books">
+            <div class="panel">
+              <div class="panel-header">
+                <div>
+                  <div class="panel-title">📚 Book Collection</div>
+                  <div
+                    id="manage-books-count"
+                    style="
+                      font-size: 0.75rem;
+                      color: var(--text-muted);
+                      margin-top: 2px;
+                    "
+                  >
+                    Loading…
+                  </div>
+                </div>
+                <button class="btn btn-gold" onclick="openAddModal()">
+                  <i data-lucide="book-up"></i>Upload New Book
+                </button>
               </div>
-              <select class="filter-select" id="manage-cat-filter"
-                      onchange="renderManageBooks(
-                                  document.getElementById('manage-search').value,
-                                  this.value,
-                                  document.getElementById('manage-status-filter').value)">
-                <!-- Populated by JS -->
-              </select>
-              <select class="filter-select" id="manage-status-filter"
-                      onchange="renderManageBooks(
-                                  document.getElementById('manage-search').value,
-                                  document.getElementById('manage-cat-filter').value,
-                                  this.value)">
-                <option value="all">All Books</option>
-                <option value="featured">Featured Only</option>
-                <option value="mine">Uploaded by Me</option>
-              </select>
+
+              <!-- Filter bar -->
+              <div
+                class="panel-body"
+                style="
+                  padding-bottom: 0;
+                  border-bottom: 1px solid rgba(196, 150, 44, 0.08);
+                "
+              >
+                <div class="filter-bar">
+                  <div class="filter-search" style="flex: 2">
+                    <span><i data-lucide="search"></i></span>
+                    <input
+                      type="text"
+                      id="manage-search"
+                      placeholder="Search title, author, category…"
+                      oninput="
+                        renderManageBooks(
+                          this.value,
+                          document.getElementById('manage-cat-filter').value,
+                          document.getElementById('manage-status-filter').value,
+                        )
+                      "
+                      aria-label="Search books"
+                    />
+                  </div>
+                  <select
+                    class="filter-select"
+                    id="manage-cat-filter"
+                    onchange="
+                      renderManageBooks(
+                        document.getElementById('manage-search').value,
+                        this.value,
+                        document.getElementById('manage-status-filter').value,
+                      )
+                    "
+                  >
+                    <!-- Populated by JS -->
+                  </select>
+                  <select
+                    class="filter-select"
+                    id="manage-status-filter"
+                    onchange="
+                      renderManageBooks(
+                        document.getElementById('manage-search').value,
+                        document.getElementById('manage-cat-filter').value,
+                        this.value,
+                      )
+                    "
+                  >
+                    <option value="all">All Books</option>
+                    <option value="featured">Featured Only</option>
+                    <option value="mine">Uploaded by Me</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Table -->
+              <div class="table-scroll">
+                <table class="books-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 220px">Book</th>
+                      <th>Category</th>
+                      <th>Rating</th>
+                      <th>Pages</th>
+                      <th>Uploaded</th>
+                      <th>Featured</th>
+                      <th style="min-width: 130px">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="books-table-body">
+                    <!-- Rendered by JS -->
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          </section>
+          <!-- /section-lib-books -->
 
-          <!-- Table -->
-          <div class="table-scroll">
-            <table class="books-table">
-              <thead>
-                <tr>
-                  <th style="min-width:220px;">Book</th>
-                  <th>Category</th>
-                  <th>Rating</th>
-                  <th>Pages</th>
-                  <th>Uploaded</th>
-                  <th>Featured</th>
-                  <th style="min-width:130px;">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="books-table-body">
-                <!-- Rendered by JS -->
-              </tbody>
-            </table>
-          </div>
-
-        </div>
-
-      </section><!-- /section-lib-books -->
-
-
-      <!-- ────────────────────────────────────────
+          <!-- ────────────────────────────────────────
            SECTION: MANAGE CATEGORIES
            ──────────────────────────────────────── -->
-      <section class="page-section" id="section-lib-categories">
-
-        <div class="grid-2" style="align-items:start;">
-
-          <!-- Add / edit category -->
-          <div style="display:flex; flex-direction:column; gap:18px;">
-
-            <!-- Add new category -->
-            <div class="panel">
-              <div class="panel-header">
-                <div class="panel-title"><i data-lucide="circle-plus"></i> Add Category</div>
-              </div>
-              <div class="panel-body">
-                <div class="add-cat-row">
-                  <div class="filter-search add-cat-input">
-                    <span><i data-lucide="tag"></i></span>
-                    <input type="text" id="new-cat-input"
-                           placeholder="e.g. Romance, Law, Medicine…"
-                           onkeydown="if(event.key==='Enter') addCategory()"
-                           aria-label="New category name" />
+          <section class="page-section" id="section-lib-categories">
+            <div class="grid-2" style="align-items: start">
+              <!-- Add / edit category -->
+              <div style="display: flex; flex-direction: column; gap: 18px">
+                <!-- Add new category -->
+                <div class="panel">
+                  <div class="panel-header">
+                    <div class="panel-title">
+                      <i data-lucide="circle-plus"></i> Add Category
+                    </div>
                   </div>
-                  <button class="btn btn-gold add-cat-btn" onclick="addCategory()">Add</button>
+                  <div class="panel-body">
+                    <div class="add-cat-row">
+                      <div class="filter-search add-cat-input">
+                        <span><i data-lucide="tag"></i></span>
+                        <input
+                          type="text"
+                          id="new-cat-input"
+                          placeholder="e.g. Romance, Law, Medicine…"
+                          onkeydown="if (event.key === 'Enter') addCategory();"
+                          aria-label="New category name"
+                        />
+                      </div>
+                      <button
+                        class="btn btn-gold add-cat-btn"
+                        onclick="addCategory()"
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Edit category inline form -->
+                <div class="panel" id="edit-cat-wrap" style="display: none">
+                  <div class="panel-header">
+                    <div class="panel-title">
+                      <i data-lucide="pencil"></i>Rename Category
+                    </div>
+                  </div>
+                  <div class="panel-body">
+                    <div class="edit-cat-form">
+                      <div class="filter-search edit-cat-input-wrap">
+                        <span><i data-lucide="tag"></i></span>
+                        <input
+                          type="text"
+                          id="edit-cat-input"
+                          placeholder="New category name"
+                          onkeydown="
+                            if (event.key === 'Enter') saveEditCategory();
+                          "
+                          aria-label="Edit category name"
+                        />
+                      </div>
+                      <div class="edit-cat-actions">
+                        <button
+                          class="btn btn-gold btn-sm"
+                          onclick="saveEditCategory()"
+                        >
+                          <i data-lucide="save"></i>Save
+                        </button>
+                        <button
+                          class="btn btn-outline btn-sm"
+                          onclick="cancelEditCategory()"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Category tips -->
+                <div class="panel">
+                  <div class="panel-header">
+                    <div class="panel-title">
+                      <i data-lucide="lightbulb"></i>Tips
+                    </div>
+                  </div>
+                  <div class="panel-body">
+                    <ul
+                      style="
+                        list-style: none;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                      "
+                    >
+                      <li
+                        style="
+                          display: flex;
+                          gap: 10px;
+                          font-size: 0.82rem;
+                          color: var(--text-muted);
+                        "
+                      >
+                        <span><i data-lucide="pin"></i></span> Categories with
+                        books cannot be deleted — reassign books first.
+                      </li>
+                      <li
+                        style="
+                          display: flex;
+                          gap: 10px;
+                          font-size: 0.82rem;
+                          color: var(--text-muted);
+                        "
+                      >
+                        <span><i data-lucide="pencil"></i></span> Renaming a
+                        category updates all books in that category
+                        automatically.
+                      </li>
+                      <li
+                        style="
+                          display: flex;
+                          gap: 10px;
+                          font-size: 0.82rem;
+                          color: var(--text-muted);
+                        "
+                      >
+                        <span><i data-lucide="chart-column-stacked"></i></span>
+                        Well-named categories help readers discover books
+                        faster.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Category grid -->
+              <div class="panel">
+                <div class="panel-header">
+                  <div class="panel-title">
+                    <i data-lucide="chart-column-stacked"></i>All Categories
+                  </div>
+                  <span id="cat-count-badge" class="chip">0 total</span>
+                </div>
+                <div class="panel-body">
+                  <div
+                    style="display: flex; flex-direction: column; gap: 10px"
+                    id="categories-grid"
+                  >
+                    <!-- Rendered by JS -->
+                  </div>
                 </div>
               </div>
             </div>
+          </section>
+          <!-- /section-lib-categories -->
 
-            <!-- Edit category inline form -->
-            <div class="panel" id="edit-cat-wrap" style="display:none;">
-              <div class="panel-header">
-                <div class="panel-title"><i data-lucide="pencil"></i>Rename Category</div>
-              </div>
-              <div class="panel-body">
-                <div class="edit-cat-form">
-                  <div class="filter-search edit-cat-input-wrap">
-                    <span><i data-lucide="tag"></i></span>
-                    <input type="text" id="edit-cat-input"
-                           placeholder="New category name"
-                           onkeydown="if(event.key==='Enter') saveEditCategory()"
-                           aria-label="Edit category name" />
-                  </div>
-                  <div class="edit-cat-actions">
-                    <button class="btn btn-gold btn-sm" onclick="saveEditCategory()"><i data-lucide="save"></i>Save</button>
-                    <button class="btn btn-outline btn-sm" onclick="cancelEditCategory()">Cancel</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Category tips -->
-            <div class="panel">
-              <div class="panel-header"><div class="panel-title"><i data-lucide="lightbulb"></i>Tips</div></div>
-              <div class="panel-body">
-                <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
-                  <li style="display:flex; gap:10px; font-size:0.82rem; color:var(--text-muted);">
-                    <span><i data-lucide="pin"></i></span> Categories with books cannot be deleted — reassign books first.
-                  </li>
-                  <li style="display:flex; gap:10px; font-size:0.82rem; color:var(--text-muted);">
-                    <span><i data-lucide="pencil"></i></span> Renaming a category updates all books in that category automatically.
-                  </li>
-                  <li style="display:flex; gap:10px; font-size:0.82rem; color:var(--text-muted);">
-                    <span><i data-lucide="chart-column-stacked"></i></span> Well-named categories help readers discover books faster.
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Category grid -->
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title"><i data-lucide="chart-column-stacked"></i>All Categories</div>
-              <span id="cat-count-badge" class="chip">0 total</span>
-            </div>
-            <div class="panel-body">
-              <div style="display:flex; flex-direction:column; gap:10px;" id="categories-grid">
-                <!-- Rendered by JS -->
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </section><!-- /section-lib-categories -->
-
-
-      <!-- ────────────────────────────────────────
+          <!-- ────────────────────────────────────────
            SECTION: PROFILE
            ──────────────────────────────────────── -->
-      <section class="page-section" id="section-lib-profile">
-        <div class="grid-2" style="max-width:900px; align-items:start;">
+          <section class="page-section" id="section-lib-profile">
+            <div class="grid-2" style="max-width: 900px; align-items: start">
+              <!-- Profile display card -->
+              <div class="panel">
+                <div
+                  class="panel-body"
+                  style="text-align: center; padding: 32px 24px"
+                >
+                  <div
+                    style="
+                      width: 90px;
+                      height: 90px;
+                      border-radius: 50%;
+                      margin: 0 auto 16px;
+                      background: linear-gradient(
+                        135deg,
+                        var(--olive),
+                        var(--gold)
+                      );
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      font-family: &quot;Playfair Display&quot;, serif;
+                      font-size: 2rem;
+                      font-weight: 700;
+                      color: white;
+                      box-shadow: var(--shadow-md);
+                    "
+                    id="lib-profile-avatar"
+                  >
+                    L
+                  </div>
 
-          <!-- Profile display card -->
-          <div class="panel">
-            <div class="panel-body" style="text-align:center; padding:32px 24px;">
-              <div style="width:90px; height:90px; border-radius:50%; margin:0 auto 16px;
-                          background:linear-gradient(135deg,var(--olive),var(--gold));
-                          display:flex; align-items:center; justify-content:center;
-                          font-family:'Playfair Display',serif; font-size:2rem; font-weight:700;
-                          color:white; box-shadow:var(--shadow-md);"
-                   id="lib-profile-avatar">L</div>
+                  <h3
+                    style="font-size: 1.3rem; margin-bottom: 4px"
+                    id="lib-profile-name"
+                  >
+                    Librarian
+                  </h3>
+                  <p
+                    style="font-size: 0.84rem; margin-bottom: 10px"
+                    id="lib-profile-email"
+                  >
+                    —
+                  </p>
 
-              <h3 style="font-size:1.3rem; margin-bottom:4px;" id="lib-profile-name">Librarian</h3>
-              <p style="font-size:0.84rem; margin-bottom:10px;" id="lib-profile-email">—</p>
+                  <div
+                    style="
+                      display: inline-flex;
+                      align-items: center;
+                      gap: 7px;
+                      background: rgba(101, 90, 0, 0.1);
+                      border: 1px solid rgba(101, 90, 0, 0.2);
+                      border-radius: 20px;
+                      padding: 5px 14px;
+                      font-size: 0.75rem;
+                      font-weight: 600;
+                      color: var(--olive);
+                      margin-bottom: 20px;
+                    "
+                  >
+                    <i data-lucide="user-round-pen"></i>Librarian
+                  </div>
 
-              <div style="display:inline-flex; align-items:center; gap:7px;
-                          background:rgba(101,90,0,0.10); border:1px solid rgba(101,90,0,0.2);
-                          border-radius:20px; padding:5px 14px; font-size:0.75rem;
-                          font-weight:600; color:var(--olive); margin-bottom:20px;">
-                <i data-lucide="user-round-pen"></i>Librarian
+                  <!-- Stats -->
+                  <div
+                    style="
+                      display: grid;
+                      grid-template-columns: 1fr 1fr;
+                      gap: 12px;
+                      padding: 16px;
+                      background: var(--cream);
+                      border-radius: var(--radius-md);
+                    "
+                  >
+                    <div>
+                      <div
+                        style="
+                          font-family: &quot;Playfair Display&quot;, serif;
+                          font-size: 1.5rem;
+                          font-weight: 700;
+                          color: var(--brown-dark);
+                        "
+                        id="lib-profile-books"
+                      >
+                        0
+                      </div>
+                      <div style="font-size: 0.7rem; color: var(--text-muted)">
+                        Books Uploaded
+                      </div>
+                    </div>
+                    <div>
+                      <div
+                        style="
+                          font-family: &quot;Playfair Display&quot;, serif;
+                          font-size: 1.5rem;
+                          font-weight: 700;
+                          color: var(--brown-dark);
+                        "
+                        id="lib-profile-featured"
+                      >
+                        0
+                      </div>
+                      <div style="font-size: 0.7rem; color: var(--text-muted)">
+                        Featured Books
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      font-size: 0.74rem;
+                      color: var(--text-muted);
+                      margin-top: 12px;
+                    "
+                  >
+                    Member since <strong id="lib-profile-joined">—</strong>
+                  </div>
+                </div>
               </div>
 
-              <!-- Stats -->
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;
-                          padding:16px; background:var(--cream); border-radius:var(--radius-md);">
-                <div>
-                  <div style="font-family:'Playfair Display',serif; font-size:1.5rem;
-                               font-weight:700; color:var(--brown-dark);" id="lib-profile-books">0</div>
-                  <div style="font-size:0.7rem; color:var(--text-muted);">Books Uploaded</div>
+              <!-- Edit form -->
+              <div class="panel">
+                <div class="panel-header">
+                  <div class="panel-title">
+                    <i data-lucide="pencil"></i>Edit Profile
+                  </div>
                 </div>
-                <div>
-                  <div style="font-family:'Playfair Display',serif; font-size:1.5rem;
-                               font-weight:700; color:var(--brown-dark);" id="lib-profile-featured">0</div>
-                  <div style="font-size:0.7rem; color:var(--text-muted);">Featured Books</div>
+                <div class="panel-body">
+                  <div
+                    style="
+                      display: grid;
+                      grid-template-columns: 1fr 1fr;
+                      gap: 14px;
+                      margin-bottom: 16px;
+                    "
+                  >
+                    <div class="form-group">
+                      <label class="form-label-dash">First Name</label>
+                      <input
+                        type="text"
+                        class="form-input-dash"
+                        id="lib-edit-first"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label-dash">Last Name</label>
+                      <input
+                        type="text"
+                        class="form-input-dash"
+                        id="lib-edit-last"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label-dash">Email Address</label>
+                    <input
+                      type="email"
+                      class="form-input-dash"
+                      id="lib-edit-email"
+                    />
+                  </div>
+                  <div style="display: flex; gap: 10px">
+                    <button class="btn btn-gold" onclick="saveLibProfile()">
+                      <i data-lucide="save"></i>Save Changes
+                    </button>
+                    <button
+                      class="btn btn-outline"
+                      onclick="renderLibProfile()"
+                    >
+                      Reset
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div style="font-size:0.74rem; color:var(--text-muted); margin-top:12px;">
-                Member since <strong id="lib-profile-joined">—</strong>
               </div>
             </div>
-          </div>
-
-          <!-- Edit form -->
-          <div class="panel">
-            <div class="panel-header"><div class="panel-title"><i data-lucide="pencil"></i>Edit Profile</div></div>
-            <div class="panel-body">
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px;">
-                <div class="form-group">
-                  <label class="form-label-dash">First Name</label>
-                  <input type="text" class="form-input-dash" id="lib-edit-first" />
-                </div>
-                <div class="form-group">
-                  <label class="form-label-dash">Last Name</label>
-                  <input type="text" class="form-input-dash" id="lib-edit-last" />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label-dash">Email Address</label>
-                <input type="email" class="form-input-dash" id="lib-edit-email" />
-              </div>
-              <div style="display:flex; gap:10px;">
-                <button class="btn btn-gold" onclick="saveLibProfile()"><i data-lucide="save"></i>Save Changes</button>
-                <button class="btn btn-outline" onclick="renderLibProfile()">Reset</button>
-              </div>
-            </div>
-          </div>
-
+          </section>
+          <!-- /section-lib-profile -->
         </div>
-      </section><!-- /section-lib-profile -->
+        <!-- /page-content -->
+      </main>
+    </div>
+    <!-- /dashboard-shell -->
 
-    </div><!-- /page-content -->
-  </main>
-</div><!-- /dashboard-shell -->
-
-
-<!-- ═══════════════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════════════
      UPLOAD / EDIT BOOK MODAL
      ═══════════════════════════════════════════════════ -->
-<div class="modal-overlay" id="book-modal" role="dialog" aria-modal="true" aria-label="Book form">
-  <div class="modal-box" style="max-width:620px;">
-
-    <div class="modal-header">
-      <div class="modal-title" id="book-modal-title"><i data-lucide="book-up"></i>Upload New Book</div>
-      <button class="modal-close" onclick="closeBookModal()">✕</button>
-    </div>
-
-    <form id="book-form" onsubmit="handleBookFormSubmit(event)" novalidate>
-      <div class="modal-body">
-
-        <!-- Title + Author -->
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-          <div class="form-group">
-            <label class="form-label-dash">Book Title <span style="color:var(--error);">*</span></label>
-            <input type="text" class="form-input-dash" id="form-book-title"
-                   placeholder="e.g. Atomic Habits" required />
+    <div
+      class="modal-overlay"
+      id="book-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Book form"
+    >
+      <div class="modal-box" style="max-width: 620px">
+        <div class="modal-header">
+          <div class="modal-title" id="book-modal-title">
+            <i data-lucide="book-up"></i>Upload New Book
           </div>
-          <div class="form-group">
-            <label class="form-label-dash">Author <span style="color:var(--error);">*</span></label>
-            <input type="text" class="form-input-dash" id="form-book-author"
-                   placeholder="e.g. James Clear" required />
-          </div>
+          <button class="modal-close" onclick="closeBookModal()">✕</button>
         </div>
 
-        <!-- Category + Pages -->
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-          <div class="form-group">
-            <label class="form-label-dash">Category <span style="color:var(--error);">*</span></label>
-            <select class="form-input-dash" id="form-book-category">
-              <!-- Populated by JS -->
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label-dash">Number of Pages <span style="color:var(--error);">*</span></label>
-            <input type="number" class="form-input-dash" id="form-book-pages"
-                   placeholder="e.g. 320" min="1" required />
-          </div>
-        </div>
+        <form id="book-form" onsubmit="handleBookFormSubmit(event)" novalidate>
+          <div class="modal-body">
+            <!-- Title + Author -->
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px"
+            >
+              <div class="form-group">
+                <label class="form-label-dash"
+                  >Book Title <span style="color: var(--error)">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-input-dash"
+                  id="form-book-title"
+                  placeholder="e.g. Atomic Habits"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label-dash"
+                  >Author <span style="color: var(--error)">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-input-dash"
+                  id="form-book-author"
+                  placeholder="e.g. James Clear"
+                  required
+                />
+              </div>
+            </div>
 
-        <!-- Rating slider -->
-        <div class="form-group">
-          <label class="form-label-dash" style="display:flex; justify-content:space-between;">
-            <span>Reader Rating</span>
-            <span id="rating-display" style="color:var(--gold); font-weight:700;">4.5 ★</span>
-          </label>
-          <input type="range" id="form-book-rating" min="1" max="5" step="0.1" value="4.5"
-                 oninput="document.getElementById('rating-display').textContent = (+this.value).toFixed(1) + ' ★'" />
-          <div style="display:flex; justify-content:space-between; font-size:0.68rem;
-                      color:var(--text-muted); margin-top:3px;">
-            <span>1 (Poor)</span><span>5 (Excellent)</span>
-          </div>
-        </div>
+            <!-- Category + Pages -->
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px"
+            >
+              <div class="form-group">
+                <label class="form-label-dash"
+                  >Category <span style="color: var(--error)">*</span></label
+                >
+                <select class="form-input-dash" id="form-book-category">
+                  <!-- Populated by JS -->
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label-dash"
+                  >Number of Pages
+                  <span style="color: var(--error)">*</span></label
+                >
+                <input
+                  type="number"
+                  class="form-input-dash"
+                  id="form-book-pages"
+                  placeholder="e.g. 320"
+                  min="1"
+                  required
+                />
+              </div>
+            </div>
 
-        <!-- Description -->
-        <div class="form-group">
-          <label class="form-label-dash">Description</label>
-          <textarea class="form-input-dash" id="form-book-description" rows="3"
-                    placeholder="Brief summary of the book…"
-                    style="resize:vertical;"></textarea>
-        </div>
+            <!-- Rating slider -->
+            <div class="form-group">
+              <label
+                class="form-label-dash"
+                style="display: flex; justify-content: space-between"
+              >
+                <span>Reader Rating</span>
+                <span
+                  id="rating-display"
+                  style="color: var(--gold); font-weight: 700"
+                  >4.5 ★</span
+                >
+              </label>
+              <input
+                type="range"
+                id="form-book-rating"
+                min="1"
+                max="5"
+                step="0.1"
+                value="4.5"
+                oninput="
+                  document.getElementById('rating-display').textContent =
+                    (+this.value).toFixed(1) + ' ★'
+                "
+              />
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  font-size: 0.68rem;
+                  color: var(--text-muted);
+                  margin-top: 3px;
+                "
+              >
+                <span>1 (Poor)</span><span>5 (Excellent)</span>
+              </div>
+            </div>
 
-        <!-- Cover colour picker + preview -->
-        <div class="form-group">
-          <label class="form-label-dash" style="margin-bottom:10px;">Cover Colour</label>
-          <div style="display:flex; align-items:center; gap:16px;">
-            <!-- Live preview -->
-            <div class="cover-preview-box bc-1" id="cover-preview-box"></div>
-            <!-- Swatches -->
-            <div class="cover-swatches">
-              <div class="cover-swatch bc-1 selected" data-cover="bc-1" onclick="selectCoverColor('bc-1')" title="Brown Gold"></div>
-              <div class="cover-swatch bc-2" data-cover="bc-2" onclick="selectCoverColor('bc-2')" title="Teal Green"></div>
-              <div class="cover-swatch bc-3" data-cover="bc-3" onclick="selectCoverColor('bc-3')" title="Olive Gold"></div>
-              <div class="cover-swatch bc-4" data-cover="bc-4" onclick="selectCoverColor('bc-4')" title="Purple"></div>
-              <div class="cover-swatch bc-5" data-cover="bc-5" onclick="selectCoverColor('bc-5')" title="Blue"></div>
-              <div class="cover-swatch bc-6" data-cover="bc-6" onclick="selectCoverColor('bc-6')" title="Amber"></div>
-              <div class="cover-swatch bc-7" data-cover="bc-7" onclick="selectCoverColor('bc-7')" title="Forest Green"></div>
-              <div class="cover-swatch bc-8" data-cover="bc-8" onclick="selectCoverColor('bc-8')" title="Rose"></div>
+            <!-- Description -->
+            <div class="form-group">
+              <label class="form-label-dash">Description</label>
+              <textarea
+                class="form-input-dash"
+                id="form-book-description"
+                rows="3"
+                placeholder="Brief summary of the book…"
+                style="resize: vertical"
+              ></textarea>
+            </div>
+
+            <!-- Cover colour picker + preview -->
+            <div class="form-group">
+              <label class="form-label-dash" style="margin-bottom: 10px"
+                >Cover Colour</label
+              >
+              <div style="display: flex; align-items: center; gap: 16px">
+                <!-- Live preview -->
+                <div
+                  class="cover-preview-box bc-1"
+                  id="cover-preview-box"
+                ></div>
+                <!-- Swatches -->
+                <div class="cover-swatches">
+                  <div
+                    class="cover-swatch bc-1 selected"
+                    data-cover="bc-1"
+                    onclick="selectCoverColor('bc-1')"
+                    title="Brown Gold"
+                  ></div>
+                  <div
+                    class="cover-swatch bc-2"
+                    data-cover="bc-2"
+                    onclick="selectCoverColor('bc-2')"
+                    title="Teal Green"
+                  ></div>
+                  <div
+                    class="cover-swatch bc-3"
+                    data-cover="bc-3"
+                    onclick="selectCoverColor('bc-3')"
+                    title="Olive Gold"
+                  ></div>
+                  <div
+                    class="cover-swatch bc-4"
+                    data-cover="bc-4"
+                    onclick="selectCoverColor('bc-4')"
+                    title="Purple"
+                  ></div>
+                  <div
+                    class="cover-swatch bc-5"
+                    data-cover="bc-5"
+                    onclick="selectCoverColor('bc-5')"
+                    title="Blue"
+                  ></div>
+                  <div
+                    class="cover-swatch bc-6"
+                    data-cover="bc-6"
+                    onclick="selectCoverColor('bc-6')"
+                    title="Amber"
+                  ></div>
+                  <div
+                    class="cover-swatch bc-7"
+                    data-cover="bc-7"
+                    onclick="selectCoverColor('bc-7')"
+                    title="Forest Green"
+                  ></div>
+                  <div
+                    class="cover-swatch bc-8"
+                    data-cover="bc-8"
+                    onclick="selectCoverColor('bc-8')"
+                    title="Rose"
+                  ></div>
+                </div>
+              </div>
+              <input type="hidden" id="selected-cover" value="bc-1" />
+            </div>
+
+            <!-- Featured toggle -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 14px 16px;
+                background: var(--cream);
+                border-radius: var(--radius-sm);
+                border: 1px solid rgba(196, 150, 44, 0.15);
+              "
+            >
+              <div>
+                <div
+                  style="
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    color: var(--brown-dark);
+                  "
+                >
+                  ⭐ Feature this book
+                </div>
+                <div style="font-size: 0.74rem; color: var(--text-muted)">
+                  Featured books appear on the homepage &amp; member dashboards
+                </div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="form-book-featured" />
+                <span class="toggle-track"></span>
+                <span class="toggle-thumb"></span>
+              </label>
             </div>
           </div>
-          <input type="hidden" id="selected-cover" value="bc-1" />
-        </div>
+          <!-- /modal-body -->
 
-        <!-- Featured toggle -->
-        <div style="display:flex; align-items:center; justify-content:space-between;
-                    padding:14px 16px; background:var(--cream); border-radius:var(--radius-sm);
-                    border:1px solid rgba(196,150,44,0.15);">
-          <div>
-            <div style="font-size:0.85rem; font-weight:600; color:var(--brown-dark);">⭐ Feature this book</div>
-            <div style="font-size:0.74rem; color:var(--text-muted);">Featured books appear on the homepage &amp; member dashboards</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline"
+              onclick="closeBookModal()"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-gold"
+              id="book-modal-submit-btn"
+            >
+              <i data-lucide="book-up"></i>Upload Book
+            </button>
           </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="form-book-featured" />
-            <span class="toggle-track"></span>
-            <span class="toggle-thumb"></span>
-          </label>
-        </div>
-
-      </div><!-- /modal-body -->
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline" onclick="closeBookModal()">Cancel</button>
-        <button type="submit" class="btn btn-gold" id="book-modal-submit-btn"><i data-lucide="book-up"></i>Upload Book</button>
+        </form>
       </div>
-    </form>
+    </div>
+    <!-- /book-modal -->
 
-  </div>
-</div><!-- /book-modal -->
-
-
-<!-- ═══════════════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════════════
      DELETE CONFIRMATION MODAL
      ═══════════════════════════════════════════════════ -->
-<div class="modal-overlay" id="delete-modal" role="dialog" aria-modal="true" aria-label="Confirm delete">
-  <div class="modal-box" style="max-width:420px;">
-    <div class="modal-header" style="border-bottom-color:rgba(201,64,64,0.15);">
-      <div class="modal-title" style="color:var(--error);">⚠️ Delete Book</div>
-      <button class="modal-close" onclick="cancelDelete()">✕</button>
+    <div
+      class="modal-overlay"
+      id="delete-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Confirm delete"
+    >
+      <div class="modal-box" style="max-width: 420px">
+        <div
+          class="modal-header"
+          style="border-bottom-color: rgba(201, 64, 64, 0.15)"
+        >
+          <div class="modal-title" style="color: var(--error)">
+            ⚠️ Delete Book
+          </div>
+          <button class="modal-close" onclick="cancelDelete()">✕</button>
+        </div>
+        <div class="modal-body">
+          <p
+            style="
+              font-size: 0.9rem;
+              color: var(--text-muted);
+              line-height: 1.65;
+            "
+          >
+            Are you sure you want to permanently delete
+            <strong id="delete-book-title" style="color: var(--brown-dark)"
+              >"Book Title"</strong
+            >? This action <strong>cannot be undone</strong> and will remove the
+            book from all member libraries.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="cancelDelete()">
+            Cancel
+          </button>
+          <button class="btn btn-danger" onclick="executeDelete()">
+            🗑️ Yes, Delete
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="modal-body">
-      <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.65;">
-        Are you sure you want to permanently delete
-        <strong id="delete-book-title" style="color:var(--brown-dark);">"Book Title"</strong>?
-        This action <strong>cannot be undone</strong> and will remove the book from all member libraries.
-      </p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="cancelDelete()">Cancel</button>
-      <button class="btn btn-danger" onclick="executeDelete()">🗑️ Yes, Delete</button>
-    </div>
-  </div>
-</div>
 
+    <!-- Toast container -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
 
-<!-- Toast container -->
-<div class="toast-container" id="toast-container" aria-live="polite"></div>
-
-
-<!-- ═══════════════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════════════
      SCRIPTS
      ═══════════════════════════════════════════════════ -->
-<script src="js/auth.js"></script>
-<script src="js/book-editor.js"></script>
-<script src="js/librarian.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/book-editor.js"></script>
+    <script src="js/librarian.js"></script>
 
+    <script>
+      /* ── Auth guard ── */
+      (function () {
+        const s = JSON.parse(
+          localStorage.getItem("liverary_session") || "null",
+        );
+        if (!s || s.role !== "librarian") window.location.href = "login.html";
+      })();
 
+      /* ── Logout ── */
+      function handleLibLogout() {
+        localStorage.removeItem("liverary_session");
+        window.location.href = "login.html";
+      }
 
-<script>
-  /* ── Auth guard ── */
-  (function() {
-    const s = JSON.parse(localStorage.getItem('liverary_session') || 'null');
-    if (!s || s.role !== 'librarian') window.location.href = 'login.html';
-  })();
+      /* ── Topbar search → switch to books & filter ── */
+      function handleLibTopSearch(val) {
+        if (!val.trim()) return;
+        libSwitchSection("lib-books");
+        const el = document.getElementById("manage-search");
+        if (el) {
+          el.value = val;
+          renderManageBooks(val, "all", "all");
+        }
+      }
 
-  /* ── Logout ── */
-  function handleLibLogout() {
-    localStorage.removeItem('liverary_session');
-    window.location.href = 'login.html';
-  }
+      /* ── Keep category count badge in sync ── */
+      const origRenderCats = window.renderCategories;
+      document.addEventListener("DOMContentLoaded", () => {
+        // Patch renderCategories to also update count badge
+        const _orig = renderCategories;
+        window.renderCategories = function () {
+          _orig();
+          const badge = document.getElementById("cat-count-badge");
+          if (badge) badge.textContent = `${libCategories.length} total`;
+        };
+      });
+    </script>
 
-  /* ── Topbar search → switch to books & filter ── */
-  function handleLibTopSearch(val) {
-    if (!val.trim()) return;
-    libSwitchSection('lib-books');
-    const el = document.getElementById('manage-search');
-    if (el) { el.value = val; renderManageBooks(val, 'all', 'all'); }
-  }
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-  /* ── Keep category count badge in sync ── */
-  const origRenderCats = window.renderCategories;
-  document.addEventListener('DOMContentLoaded', () => {
-    // Patch renderCategories to also update count badge
-    const _orig = renderCategories;
-    window.renderCategories = function() {
-      _orig();
-      const badge = document.getElementById('cat-count-badge');
-      if (badge) badge.textContent = `${libCategories.length} total`;
-    };
-  });
-</script>
-
-<script src="https://unpkg.com/lucide@latest"></script>
-
-<script>
-  lucide.createIcons();
-</script>
-</body>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
 </html>
